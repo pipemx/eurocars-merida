@@ -45,7 +45,7 @@ export const vehicles: Vehicle[] = seeds.map((s, i) => {
     year: s.year,
     price: s.price,
     mileage: s.mileage,
-    transmission: "Automático",
+    transmission: "automatic",
     engine: null,
     drivetrain: null,
     exteriorColor: null,
@@ -63,11 +63,5 @@ export const vehicles: Vehicle[] = seeds.map((s, i) => {
   };
 });
 
-export const categories: { id: "todos" | VehicleCategory; label: string }[] = [
-  { id: "todos", label: "Todos" },
-  { id: "exoticos", label: "Exóticos" },
-  { id: "premium", label: "Premium" },
-  { id: "suv", label: "SUVs" },
-  { id: "pickups", label: "Pickups" },
-  { id: "electricos", label: "Eléctricos" },
-];
+export const categories = ["todos", "exoticos", "premium", "suv", "pickups", "electricos", "familiares", "compactos"] as const;
+export type CategoryId = (typeof categories)[number];

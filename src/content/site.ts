@@ -15,11 +15,6 @@ export const site = {
     city: "Mérida",
     region: "Yucatán",
   },
-  /** MOCKUP — los directorios muestran horarios distintos; confirmar. */
-  hours: [
-    { days: "Lun - Sáb", time: "9:00 a 19:00" },
-    { days: "Dom", time: "10:00 a 14:00" },
-  ],
   /** MOCKUP — confirmar en Google Business Profile. */
   google: {
     rating: "4.8",
@@ -33,40 +28,3 @@ export const site = {
   },
   maps: "https://maps.app.goo.gl/9G9rfZMcazzWYHyGA",
 } as const;
-
-export const nav = [
-  { label: "Inicio", href: "/" },
-  { label: "Inventario", href: "/#inventario" },
-  { label: "Vender tu auto", href: "/#vende-tu-auto" },
-  { label: "Financiamiento", href: "/#financiamiento" },
-  { label: "Nosotros", href: "/#nosotros" },
-  { label: "Contacto", href: "/#contacto" },
-] as const;
-
-/** MOCKUP — condiciones a confirmar antes de publicar. */
-export const financingPoints = [
-  "Desde 10% de enganche",
-  "Sin comprobar ingresos",
-  "Crédito directo",
-  "Sin consultar buró",
-  "Sin aval",
-];
-
-/** MOCKUP — testimonios del diseño de referencia; sustituir por reseñas reales de Google. */
-export const testimonials = [
-  {
-    initials: "CM",
-    name: "Carlos Méndez",
-    text: "Excelente atención y proceso muy transparente. Me ayudaron a encontrar el auto perfecto.",
-  },
-  {
-    initials: "AR",
-    name: "Ana R.",
-    text: "Mi experiencia fue increíble, todo muy profesional y sin complicaciones.",
-  },
-  {
-    initials: "LH",
-    name: "Luis Herrera",
-    text: "Gran variedad de autos y un equipo que realmente te asesora. 100% recomendados.",
-  },
-];

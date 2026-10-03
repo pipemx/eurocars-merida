@@ -7,7 +7,7 @@ type Props = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   eventParams?: Record<string, string | number>;
 };
 
-/** Enlace externo que registra un evento analytics al hacer clic. */
+/** Enlace que registra un evento analytics al hacer clic (externos en pestaña nueva). */
 export function TrackedLink({ event, eventParams, onClick, ...rest }: Props) {
   const external = rest.href?.startsWith("http");
   return (
