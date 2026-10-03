@@ -37,11 +37,11 @@ export function InventorySection({ vehicles }: { vehicles: Vehicle[] }) {
   };
 
   return (
-    <section id="inventario" aria-labelledby="inv-title" className="scroll-mt-20 bg-bg pb-14 pt-16 md:pb-20 md:pt-24 light:md:pb-28 light:md:pt-32">
-      <div className="container-ec flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+    <section id="inventario" aria-labelledby="inv-title" className="scroll-mt-20 bg-bg pb-16 pt-16 md:pb-24 md:pt-24">
+      <div data-reveal className="reveal container-ec flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="eyebrow flex items-center gap-4 text-muted">
-            <span aria-hidden className="h-px w-8 bg-accent" />
+            <span aria-hidden className="draw-line h-px w-10 bg-accent" />
             {t.inventory.eyebrow}
           </p>
           <h2 id="inv-title" className="serif-title mt-4 text-[clamp(2.4rem,5vw,3.9rem)] font-normal">
@@ -75,7 +75,7 @@ export function InventorySection({ vehicles }: { vehicles: Vehicle[] }) {
       {list.length > 0 ? (
         <ul
           ref={rail}
-          className="no-scrollbar mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [--pad:20px] [padding-inline:var(--pad)] [scroll-padding-inline:var(--pad)] md:[--pad:40px] light:md:gap-8 xl:[--pad:max(80px,calc((100vw_-_1440px)/2_+_80px))]"
+          className="no-scrollbar mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [--pad:20px] [padding-inline:var(--pad)] [scroll-padding-inline:var(--pad)] md:[--pad:40px] xl:[--pad:max(80px,calc((100vw_-_1440px)/2_+_80px))]"
         >
           {list.map((v) => (
             <li key={v.id} className="w-[82vw] max-w-[360px] shrink-0 snap-start md:w-[330px]">

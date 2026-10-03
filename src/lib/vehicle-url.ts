@@ -11,10 +11,10 @@ export function vehicleUrl(locale: Locale, slug: string, absolute = false) {
  * Mientras no exista la ficha individual (siguiente entrega), compartir apunta a la home con
  * el vehículo destacado, para no difundir enlaces rotos. Cambiar a vehicleUrl() al publicar fichas.
  */
-export const VEHICLE_PAGES_READY = false;
+export const VEHICLE_PAGES_READY = true;
 
 export function shareUrl(locale: Locale, slug: string) {
-  if (VEHICLE_PAGES_READY) return vehicleUrl(locale, slug, true);
   const origin = typeof window !== "undefined" ? window.location.origin : site.url;
+  if (VEHICLE_PAGES_READY) return `${origin}${vehicleUrl(locale, slug)}`;
   return `${origin}/${locale}?v=${slug}#inventario`;
 }

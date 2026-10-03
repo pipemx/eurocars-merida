@@ -33,8 +33,9 @@ export interface Vehicle {
   drivetrain: string | null;
   exteriorColor: string | null;
   interiorColor: string | null;
-  description: string;
-  features: string[];
+  /** Texto por idioma. */
+  description: { es: string; en: string };
+  features: { es: string[]; en: string[] };
   coverImage: VehicleImage;
   gallery: VehicleImage[];
   financingAvailable: boolean;

@@ -13,9 +13,11 @@ type Props = {
   vehicleId?: string;
   /** Eleva el botón cuando la página tiene barra inferior fija (ficha móvil). */
   raised?: boolean;
+  /** Ocultar en móvil (cuando la página ya tiene barra fija de WhatsApp). */
+  desktopOnly?: boolean;
 };
 
-export function FloatingWhatsApp({ message, source = "home", vehicleId, raised = false }: Props) {
+export function FloatingWhatsApp({ message, source = "home", vehicleId, raised = false, desktopOnly = false }: Props) {
   const { t } = usePreferences();
   // En móvil aparece tras bajar por la portada, para no tapar sus CTAs. En escritorio, siempre.
   const [visible, setVisible] = useState(false);
@@ -38,7 +40,7 @@ export function FloatingWhatsApp({ message, source = "home", vehicleId, raised =
       aria-label={t.whatsapp.aria}
       onClick={() => track("whatsapp_click", { source: `floating_${source}`, ...(vehicleId ? { vehicle_id: vehicleId } : {}) })}
       style={{ bottom: `calc(${raised ? "84px" : "20px"} + env(safe-area-inset-bottom))` }}
-      className="wa-enter group fixed right-4 z-40 md:right-6"
+      className={`wa-enter group fixed right-4 z-40 md:right-6 ${desktopOnly ? "max-lg:hidden" : ""}`}
     >
       <span aria-hidden className="wa-pulse absolute left-0 top-0 h-14 w-14 rounded-full" />
       <span className="relative flex h-14 items-center overflow-hidden rounded-full bg-[#1fae55] text-white shadow-[0_10px_30px_-10px_rgb(0_0_0/0.55)] ring-1 ring-black/10 transition-[background-color] duration-300 group-hover:bg-[#1c9e4d]">

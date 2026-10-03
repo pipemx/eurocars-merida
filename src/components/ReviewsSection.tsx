@@ -10,11 +10,11 @@ import { TrackedLink } from "./TrackedLink";
  */
 export function ReviewsSection({ t, locale }: { t: Dictionary; locale: "es" | "en" }) {
   return (
-    <section id="nosotros" aria-labelledby="trust-title" className="scroll-mt-20 bg-[#f4f2ed] py-16 text-[#151616] md:py-20 light:bg-surface">
-      <div className="container-ec grid gap-10 md:grid-cols-12 md:items-center">
+    <section id="nosotros" aria-labelledby="trust-title" className="scroll-mt-20 bg-[#f4f2ed] py-16 text-[#151616] md:py-20 light:bg-[#101112] light:text-[#f3f1ec]">
+      <div data-reveal className="reveal container-ec grid gap-10 md:grid-cols-12 md:items-center">
         <div className="md:col-span-6">
           <p className="eyebrow flex items-center gap-4 opacity-60">
-            <span aria-hidden className="h-px w-8 bg-[#9b8055]" />
+            <span aria-hidden className="draw-line h-px w-10 bg-[#c6a66a]" />
             {t.trust.eyebrow}
           </p>
           <h2 id="trust-title" className="serif-title mt-4 text-[clamp(2.2rem,4vw,3.2rem)] font-normal">

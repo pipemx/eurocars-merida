@@ -5,6 +5,8 @@ import { site } from "@/content/site";
 import { hreflang, isLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { PreferencesProvider, themeInitScript } from "@/components/providers/Preferences";
+import { RevealObserver } from "@/components/RevealObserver";
+import { Intro } from "@/components/Intro";
 import "../globals.css";
 
 const jost = localFont({
@@ -50,7 +52,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       title: t.meta.title,
       description: t.meta.description,
       url: `/${locale}`,
-      images: [{ url: "/eurocars/showroom/mockup-hero-showroom.webp", width: 2308, height: 1428 }],
+      images: [{ url: "/eurocars/og/home.jpg", width: 1200, height: 630 }],
     },
     twitter: { card: "summary_large_image" },
     // Vista previa con contenido sin verificar: no indexar todavía.
@@ -74,8 +76,12 @@ export default async function LocaleLayout({ children, params }: { children: Rea
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body>
-        <PreferencesProvider locale={locale}>{children}</PreferencesProvider>
+      <body className="grain">
+        <PreferencesProvider locale={locale}>
+          <Intro />
+          {children}
+          <RevealObserver />
+        </PreferencesProvider>
       </body>
     </html>
   );

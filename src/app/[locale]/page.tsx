@@ -10,6 +10,8 @@ import { FinancingSection } from "@/components/FinancingSection";
 import { SellYourCarSection } from "@/components/SellYourCarSection";
 import { ReviewsSection } from "@/components/ReviewsSection";
 import { Footer } from "@/components/Footer";
+import { LocationPreview } from "@/components/LocationPreview";
+import { BrandMarquee } from "@/components/BrandMarquee";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
@@ -25,9 +27,11 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <InventorySection vehicles={vehicles.filter((v) => v.featured)} />
         <FinancingSection t={t} />
         <SellYourCarSection t={t} />
+        <BrandMarquee />
         <ReviewsSection t={t} locale={locale} />
+        <LocationPreview />
       </main>
-      <Footer t={t} />
+      <Footer t={t} locale={locale} />
       <FloatingWhatsApp source="home" />
     </>
   );

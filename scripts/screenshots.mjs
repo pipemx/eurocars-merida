@@ -20,7 +20,10 @@ async function open(theme, s, { reduce = true, path = "/es" } = {}) {
     hasTouch: s.mobile,
     reducedMotion: reduce ? "reduce" : "no-preference",
   });
-  await ctx.addInitScript((t) => localStorage.setItem("ec-theme", t), theme);
+  await ctx.addInitScript((t) => {
+    localStorage.setItem("ec-theme", t);
+    sessionStorage.setItem("ec-intro", "1");
+  }, theme);
   const page = await ctx.newPage();
   await page.goto(base + path, { waitUntil: "load" });
   await page.evaluate(() => document.fonts.ready);
@@ -35,6 +38,19 @@ for (const theme of ["dark", "light"]) {
     await page.screenshot({ path: `qa/qa-home-${theme}-${s.tag}.png`, fullPage: true });
     await page.screenshot({ path: `qa/fold-home-${theme}-${s.tag}.png` });
     console.log(`qa-home-${theme}-${s.tag}`, "overflowX:", overflow);
+    await ctx.close();
+  }
+}
+
+// Fichas de vehículo
+for (const theme of ["dark", "light"]) {
+  for (const s of sizes) {
+    const { ctx, page } = await open(theme, s, { path: "/es/inventario/lamborghini-huracan-sto-2022" });
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    const og = await page.evaluate(() => document.querySelector('meta[property="og:image"]')?.getAttribute("content"));
+    await page.screenshot({ path: `qa/qa-vehicle-${theme}-${s.tag}.png`, fullPage: true });
+    await page.screenshot({ path: `qa/fold-vehicle-${theme}-${s.tag}.png` });
+    console.log(`qa-vehicle-${theme}-${s.tag}`, "overflowX:", overflow, "og:image:", og);
     await ctx.close();
   }
 }

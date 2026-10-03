@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatedEurocarsLogo, eurocarsLogoProps } from "./AnimatedEurocarsLogo";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -25,6 +26,8 @@ export function useNavItems() {
 export function Header() {
   const { locale, t } = usePreferences();
   const items = useNavItems();
+  const pathname = usePathname();
+  const activeId = pathname === `/${locale}` ? "home" : "inventory";
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -44,7 +47,9 @@ export function Header() {
       </a>
       <header
         className={`fixed inset-x-0 top-0 z-50 text-ink transition-[background-color,border-color,backdrop-filter] duration-500 ${
-          solid ? "border-b border-line bg-bg/85 backdrop-blur-md" : "border-b border-transparent"
+          solid
+            ? "border-b border-line bg-bg/85 backdrop-blur-md"
+            : "border-b border-transparent"
         }`}
       >
         <div className={`container-ec flex items-center justify-between gap-6 transition-[height] duration-500 ${solid ? "h-[72px]" : "h-[84px] md:h-[112px]"}`}>
@@ -58,7 +63,7 @@ export function Header() {
           <nav aria-label="Principal" className="hidden lg:block">
             <ul className="flex items-center gap-7 xl:gap-10">
               {items.map((item) => {
-                const active = item.id === "home";
+                const active = item.id === activeId;
                 return (
                   <li key={item.id}>
                     <Link
