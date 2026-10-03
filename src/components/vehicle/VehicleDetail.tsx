@@ -15,7 +15,7 @@ import { VehicleStatus } from "../VehicleStatus";
 import { TrackedLink } from "../TrackedLink";
 import { VehicleGallery } from "./VehicleGallery";
 import { VehicleSpecs } from "./VehicleSpecs";
-import { VehicleActions } from "./VehicleActions";
+import { VehicleActions, VehicleStickyBar } from "./VehicleActions";
 
 const fmt = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
 
@@ -157,6 +157,7 @@ export function VehicleDetail({ v, locale }: { v: Vehicle; locale: Locale }) {
         </section>
       </main>
       <Footer t={t} locale={locale} />
+      <VehicleStickyBar v={v} />
       <FloatingWhatsApp source="vehicle" vehicleId={v.id} message={t.whatsapp.vehicle(vehicleName(v))} desktopOnly />
     </>
   );

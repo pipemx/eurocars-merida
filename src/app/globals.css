@@ -280,7 +280,8 @@ html.theme-transition *::after {
   transform: scaleX(1);
 }
 
-/* Redes sociales: anillo de color + relleno de marca + latido periódico escalonado */
+/* Redes sociales: anillo de marca siempre visible y girando, resplandor de marca,
+   relleno de marca al interactuar y "latido" periódico escalonado (también en móvil). */
 .social-btn {
   position: relative;
   display: grid;
@@ -289,25 +290,22 @@ html.theme-transition *::after {
   height: 44px;
   border-radius: 9999px;
   isolation: isolate;
-  transition: transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1), color 300ms;
+  transition: transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1), color 250ms, box-shadow 400ms;
 }
 .social-btn::before {
-  /* anillo cónico de marca */
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1.5px;
+  padding: 2px;
   background: var(--ring);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  opacity: 0.35;
+  opacity: 0.95;
   z-index: -1;
-  transition: opacity 300ms;
 }
 .social-btn::after {
-  /* relleno de marca */
   content: "";
   position: absolute;
   inset: 3px;
@@ -321,14 +319,9 @@ html.theme-transition *::after {
 .social-btn:hover,
 .social-btn:focus-visible,
 .social-btn:active {
-  transform: translateY(-3px) scale(1.1);
+  transform: translateY(-4px) scale(1.16);
   color: #fff;
-}
-.social-btn:hover::before,
-.social-btn:focus-visible::before,
-.social-btn:active::before {
-  opacity: 1;
-  animation: spin 2.4s linear infinite;
+  box-shadow: 0 10px 26px -6px var(--glow), 0 0 0 6px color-mix(in srgb, var(--glow) 18%, transparent);
 }
 .social-btn:hover::after,
 .social-btn:focus-visible::after,
@@ -342,14 +335,16 @@ html.theme-transition *::after {
   transition: transform 300ms, opacity 300ms;
 }
 .social-btn:hover .tt-cyan,
-.social-btn:active .tt-cyan {
+.social-btn:active .tt-cyan,
+.social-btn.is-beat .tt-cyan {
   opacity: 1;
-  transform: translate(-1.5px, -1px);
+  transform: translate(-2px, -1.5px);
 }
 .social-btn:hover .tt-red,
-.social-btn:active .tt-red {
+.social-btn:active .tt-red,
+.social-btn.is-beat .tt-red {
   opacity: 1;
-  transform: translate(1.5px, 1px);
+  transform: translate(2px, 1.5px);
 }
 @keyframes spin {
   to {
@@ -358,29 +353,183 @@ html.theme-transition *::after {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* Latido de atención cada 7 s, escalonado por red */
+  /* El anillo de marca gira siempre, despacio; rápido al interactuar */
+  .social-btn::before {
+    animation: spin 5s linear infinite;
+  }
+  .social-btn:hover::before,
+  .social-btn:active::before {
+    animation-duration: 1.2s;
+  }
+  /* Latido cada 4 s escalonado: salto, relleno de marca y resplandor */
   .social-btn {
-    animation: social-beat 7s ease-in-out infinite;
-    animation-delay: calc(2.5s + var(--i, 0) * 180ms);
+    animation: social-beat 4s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+    animation-delay: calc(1.6s + var(--i, 0) * 260ms);
+  }
+  .social-btn::after {
+    animation: social-fill 4s ease-in-out infinite;
+    animation-delay: calc(1.6s + var(--i, 0) * 260ms);
   }
   .social-btn:hover,
-  .social-btn:focus-visible {
+  .social-btn:focus-visible,
+  .social-btn:active,
+  .social-btn:hover::after,
+  .social-btn:focus-visible::after,
+  .social-btn:active::after {
     animation: none;
+  }
+  .social-btn svg {
+    transition: transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .social-btn:hover svg {
+    animation: icon-wiggle 700ms ease-in-out;
   }
   @keyframes social-beat {
     0%,
-    86%,
+    70%,
     100% {
       transform: none;
+      box-shadow: 0 0 0 0 transparent;
+      color: inherit;
+    }
+    76% {
+      transform: translateY(-5px) scale(1.2);
+      box-shadow: 0 10px 24px -6px var(--glow), 0 0 0 8px color-mix(in srgb, var(--glow) 22%, transparent);
+      color: #fff;
+    }
+    84% {
+      transform: translateY(0) scale(0.96);
+      color: #fff;
     }
     90% {
-      transform: translateY(-3px) scale(1.12);
-    }
-    94% {
       transform: none;
+      box-shadow: 0 0 0 14px transparent;
+      color: inherit;
+    }
+  }
+  @keyframes social-fill {
+    0%,
+    70%,
+    92%,
+    100% {
+      transform: scale(0.2);
+      opacity: 0;
+    }
+    76%,
+    86% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  @keyframes icon-wiggle {
+    0%,
+    100% {
+      transform: rotate(0);
+    }
+    25% {
+      transform: rotate(-12deg) scale(1.1);
+    }
+    50% {
+      transform: rotate(10deg) scale(1.1);
+    }
+    75% {
+      transform: rotate(-6deg);
     }
   }
 
+  /* ---------- WhatsApp flotante ---------- */
+  .wa-ripple::before,
+  .wa-ripple::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    border: 3px solid #25d366;
+    background: rgb(37 211 102 / 0.28);
+    animation: wa-ripple 2.6s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+    animation-delay: 1.5s;
+    pointer-events: none;
+  }
+  .wa-ripple::after {
+    animation-delay: 2.8s;
+  }
+  @keyframes wa-ripple {
+    0% {
+      transform: scale(1);
+      opacity: 0.95;
+    }
+    100% {
+      transform: scale(2.1);
+      opacity: 0;
+    }
+  }
+  .wa-icon {
+    animation: wa-ring 5s ease-in-out 2.4s infinite;
+    transform-origin: 50% 60%;
+  }
+  @keyframes wa-ring {
+    0%,
+    80%,
+    100% {
+      transform: none;
+    }
+    83% {
+      transform: rotate(-16deg) scale(1.12);
+    }
+    86% {
+      transform: rotate(14deg) scale(1.12);
+    }
+    89% {
+      transform: rotate(-10deg) scale(1.08);
+    }
+    92% {
+      transform: rotate(6deg);
+    }
+    95% {
+      transform: none;
+    }
+  }
+  .wa-shine::after {
+    content: "";
+    position: absolute;
+    top: -20%;
+    bottom: -20%;
+    left: -60%;
+    width: 40%;
+    transform: skewX(-20deg);
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.55), transparent);
+    animation: wa-shine 4.5s ease-in-out 2s infinite;
+    pointer-events: none;
+  }
+  @keyframes wa-shine {
+    0%,
+    65% {
+      left: -60%;
+    }
+    85%,
+    100% {
+      left: 130%;
+    }
+  }
+  .wa-bubble {
+    animation: wa-bubble 6.5s var(--ease-editorial) 2.2s both;
+  }
+  @keyframes wa-bubble {
+    0% {
+      opacity: 0;
+      transform: translateX(10px) scale(0.92);
+    }
+    8%,
+    88% {
+      opacity: 1;
+      transform: none;
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(10px) scale(0.96);
+      visibility: hidden;
+    }
+  }
   /* Zoom cinematográfico lento del hero */
   .kenburns {
     animation: kenburns 14s ease-out both;
@@ -571,26 +720,6 @@ html.theme-transition *::after {
     to {
       opacity: 1;
       transform: none;
-    }
-  }
-  .wa-pulse::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    box-shadow: 0 0 0 0 rgb(37 211 102 / 0.45);
-    animation: wa-pulse 10s ease-out 4s infinite;
-    pointer-events: none;
-  }
-  @keyframes wa-pulse {
-    0% {
-      box-shadow: 0 0 0 0 rgb(37 211 102 / 0.4);
-    }
-    12% {
-      box-shadow: 0 0 0 14px rgb(37 211 102 / 0);
-    }
-    100% {
-      box-shadow: 0 0 0 14px rgb(37 211 102 / 0);
     }
   }
 }

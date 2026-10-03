@@ -42,7 +42,10 @@ export function Header() {
 
   return (
     <>
-      <a href="#contenido" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-bg focus:px-4 focus:py-2">
+      <a
+        href="#contenido"
+        className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4 focus-visible:z-[100] focus-visible:rounded-full focus-visible:bg-ink focus-visible:px-5 focus-visible:py-2.5 focus-visible:text-[13px] focus-visible:text-bg focus-visible:shadow-lg"
+      >
         {t.nav.skip}
       </a>
       <header

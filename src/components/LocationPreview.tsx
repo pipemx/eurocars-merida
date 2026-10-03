@@ -65,7 +65,7 @@ export function LocationPreview() {
             </div>
           </div>
 
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row md:flex-col xl:flex-row">
             <a
               href={site.maps}
               target="_blank"

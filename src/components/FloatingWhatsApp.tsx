@@ -17,6 +17,11 @@ type Props = {
   desktopOnly?: boolean;
 };
 
+/**
+ * WhatsApp flotante: gradiente verde con resplandor, ondas expansivas, destello que lo
+ * recorre, ícono que "timbra" cada pocos segundos y burbuja de mensaje que aparece sola
+ * unos segundos (y al pasar el cursor). Animaciones desactivadas con reduced-motion.
+ */
 export function FloatingWhatsApp({ message, source = "home", vehicleId, raised = false, desktopOnly = false }: Props) {
   const { t } = usePreferences();
   // En móvil aparece tras bajar por la portada, para no tapar sus CTAs. En escritorio, siempre.
@@ -32,6 +37,7 @@ export function FloatingWhatsApp({ message, source = "home", vehicleId, raised =
     };
   }, []);
   if (!visible) return null;
+
   return (
     <a
       href={whatsappHref(message ?? t.whatsapp.home)}
@@ -40,15 +46,21 @@ export function FloatingWhatsApp({ message, source = "home", vehicleId, raised =
       aria-label={t.whatsapp.aria}
       onClick={() => track("whatsapp_click", { source: `floating_${source}`, ...(vehicleId ? { vehicle_id: vehicleId } : {}) })}
       style={{ bottom: `calc(${raised ? "84px" : "20px"} + env(safe-area-inset-bottom))` }}
-      className={`wa-enter group fixed right-4 z-40 md:right-6 ${desktopOnly ? "max-lg:hidden" : ""}`}
+      className={`wa-enter group fixed right-4 z-40 flex items-center md:right-6 ${desktopOnly ? "max-lg:hidden" : ""}`}
     >
-      <span aria-hidden className="wa-pulse absolute left-0 top-0 h-14 w-14 rounded-full" />
-      <span className="relative flex h-14 items-center overflow-hidden rounded-full bg-[#1fae55] text-white shadow-[0_10px_30px_-10px_rgb(0_0_0/0.55)] ring-1 ring-black/10 transition-[background-color] duration-300 group-hover:bg-[#1c9e4d]">
-        <span className="grid h-14 w-14 shrink-0 place-items-center">
-          <WhatsappIcon className="h-[26px] w-[26px]" />
-        </span>
-        <span className="max-w-0 whitespace-nowrap pr-0 text-[14px] font-medium opacity-0 transition-[max-width,opacity,padding] duration-400 ease-[var(--ease-editorial)] [@media(hover:hover)]:group-hover:max-w-[240px] [@media(hover:hover)]:group-hover:pr-5 [@media(hover:hover)]:group-hover:opacity-100 group-focus-visible:max-w-[240px] group-focus-visible:pr-5 group-focus-visible:opacity-100">
-          {t.whatsapp.float}
+      {/* Burbuja de mensaje */}
+      <span
+        aria-hidden
+        className="wa-bubble pointer-events-none absolute right-[calc(100%+12px)] top-1/2 -translate-y-1/2 whitespace-nowrap rounded-full bg-white px-4 py-2.5 text-[13.5px] font-medium text-[#0b3d22] shadow-[0_10px_30px_-8px_rgb(0_0_0/0.45)] ring-1 ring-black/5 transition-opacity duration-300 [@media(hover:hover)]:group-hover:!visible [@media(hover:hover)]:group-hover:!animate-none [@media(hover:hover)]:group-hover:!opacity-100 [@media(hover:hover)]:group-hover:!transform-none"
+      >
+        <span className="mr-2 inline-block h-2 w-2 rounded-full bg-[#25d366] align-middle shadow-[0_0_0_3px_rgb(37_211_102/0.25)]" />
+        {t.whatsapp.float}
+        <span className="absolute -right-1.5 top-1/2 h-3 w-3 -translate-y-1/2 rotate-45 bg-white" />
+      </span>
+
+      <span className="wa-ripple relative grid h-[60px] w-[60px] place-items-center rounded-full">
+        <span className="wa-shine relative grid h-full w-full place-items-center overflow-hidden rounded-full bg-[linear-gradient(145deg,#3ee283_0%,#1fae55_55%,#128c4a_100%)] text-white shadow-[0_12px_30px_-8px_rgb(31_174_85/0.75),inset_0_1px_0_rgb(255_255_255/0.35)] ring-1 ring-white/20 transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-110 group-active:scale-95">
+          <WhatsappIcon className="wa-icon relative h-[30px] w-[30px] drop-shadow-[0_1px_1px_rgb(0_0_0/0.25)]" />
         </span>
       </span>
     </a>

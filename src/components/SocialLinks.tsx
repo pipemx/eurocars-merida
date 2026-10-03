@@ -8,7 +8,7 @@ type Network = "instagram" | "facebook" | "tiktok";
 
 const networks: Record<
   Network,
-  { label: string; href: string; handle: string; event: AnalyticsEvent; Icon: typeof InstagramIcon; ring: string; fill: string }
+  { label: string; href: string; handle: string; event: AnalyticsEvent; Icon: typeof InstagramIcon; ring: string; fill: string; glow: string }
 > = {
   instagram: {
     label: "Instagram",
@@ -18,6 +18,7 @@ const networks: Record<
     Icon: InstagramIcon,
     ring: "conic-gradient(from 0deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5,#feda75)",
     fill: "radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285aeb 90%)",
+    glow: "#e1306c",
   },
   facebook: {
     label: "Facebook",
@@ -27,6 +28,7 @@ const networks: Record<
     Icon: FacebookIcon,
     ring: "conic-gradient(from 0deg,#1877f2,#6aa9ff,#1877f2,#0b5fd1,#1877f2)",
     fill: "linear-gradient(160deg,#3b8cff,#1877f2 60%,#0b5fd1)",
+    glow: "#1877f2",
   },
   tiktok: {
     label: "TikTok",
@@ -35,11 +37,12 @@ const networks: Record<
     event: "tiktok_click",
     Icon: TiktokIcon,
     ring: "conic-gradient(from 0deg,#25f4ee,#fe2c55,#25f4ee,#fe2c55,#25f4ee)",
-    fill: "#111",
+    fill: "linear-gradient(135deg,#111 0%,#111 60%,#2a0b14 100%)",
+    glow: "#25f4ee",
   },
 };
 
-/** Botón social con anillo de marca giratorio, relleno de marca, rebote y latido periódico. */
+/** Botón social: anillo de marca girando, latido periódico con relleno y resplandor de marca, rebote al interactuar. */
 export function SocialLink({ network, location, index = 0, showHandle = false }: { network: Network; location: string; index?: number; showHandle?: boolean }) {
   const n = networks[network];
   return (
@@ -51,7 +54,7 @@ export function SocialLink({ network, location, index = 0, showHandle = false }:
       onClick={() => track(n.event, { location })}
       className="group/s relative inline-flex min-h-11 items-center gap-3"
     >
-      <span className="social-btn" style={{ "--ring": n.ring, "--fill": n.fill, "--i": index } as React.CSSProperties}>
+      <span className="social-btn" style={{ "--ring": n.ring, "--fill": n.fill, "--glow": n.glow, "--i": index } as React.CSSProperties}>
         {network === "tiktok" ? (
           <span className="relative block h-[17px] w-[17px]">
             <TiktokIcon className="tt-cyan absolute inset-0 h-[17px] w-[17px] text-[#25f4ee]" />
