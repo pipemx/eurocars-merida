@@ -56,7 +56,7 @@ export function LocationFooter() {
       <div className="border-t border-line">
         <div className="container-ec flex flex-col gap-2 py-5 text-[12px] text-bone/45 md:flex-row md:justify-between">
           <p>© {new Date().getFullYear()} Eurocars Mérida. Todos los derechos reservados.</p>
-          <a href="/aviso-de-privacidad" className="hover:text-bone/80">Aviso de privacidad</a>
+          <p>Mérida, Yucatán</p>
         </div>
       </div>
     </footer>

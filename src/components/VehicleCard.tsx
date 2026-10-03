@@ -1,8 +1,9 @@
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { Vehicle } from "@/types/vehicle";
 import { formatMileage, formatPrice } from "@/lib/format";
+import { whatsappHref } from "@/lib/whatsapp";
+import { TrackedLink } from "./TrackedLink";
 
 const statusLabel = { available: "Disponible", reserved: "Apartado", sold: "Vendido" } as const;
 
@@ -25,10 +26,16 @@ export function VehicleCard({ vehicle: v }: { vehicle: Vehicle }) {
       </div>
       <div className="flex flex-1 flex-col px-[22px] pb-6 pt-5">
         <h3 className="text-[16px] leading-[1.45] tracking-[0.06em]">
-          <Link href={`/inventario/${v.slug}`} className="after:absolute after:inset-0">
+          {/* Demo: la tarjeta abre WhatsApp con el vehículo. En la versión final irá a /inventario/[slug]. */}
+          <TrackedLink
+            href={whatsappHref({ kind: "vehicle", vehicle: v })}
+            event="whatsapp_click"
+            eventParams={{ location: "vehicle_card", vehicle: v.slug }}
+            className="after:absolute after:inset-0"
+          >
             <span className="block uppercase">{v.brand}</span>
             <span className="block">{name}</span>
-          </Link>
+          </TrackedLink>
         </h3>
         <p className="mt-2 text-[13.5px] text-bone/75">
           {specs.map((s, i) => (
@@ -42,7 +49,7 @@ export function VehicleCard({ vehicle: v }: { vehicle: Vehicle }) {
         <div className="mt-auto flex items-center gap-3 pt-6">
           <span aria-hidden className="h-px flex-1 bg-bone/30 transition-colors group-hover:bg-champagne/70" />
           <ArrowRight className="arrow h-4 w-4 text-bone/85" strokeWidth={1.4} aria-hidden />
-          <span className="sr-only">Ver vehículo</span>
+          <span className="sr-only">Preguntar por WhatsApp</span>
         </div>
       </div>
     </article>

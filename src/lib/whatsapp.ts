@@ -11,7 +11,8 @@ export function whatsappMessage(ctx: WhatsAppContext): string {
   switch (ctx.kind) {
     case "vehicle": {
       const v = ctx.vehicle;
-      return `Hola Eurocars, vi el ${v.brand} ${v.model} ${v.version} ${v.year} en su página y quisiera más información.`;
+      const name = [v.brand, v.model, v.version, v.year].filter(Boolean).join(" ");
+      return `Hola Eurocars, vi el ${name} en su página y quisiera más información.`;
     }
     case "financing":
       return "Hola Eurocars, quisiera información sobre opciones de financiamiento.";

@@ -6,7 +6,6 @@ import { Financing } from "@/components/Financing";
 import { SellCar } from "@/components/SellCar";
 import { Trust } from "@/components/Trust";
 import { LocationFooter } from "@/components/LocationFooter";
-import { PreviewNotice } from "@/components/PreviewNotice";
 import { vehicles } from "@/content/vehicles";
 
 export default function Home() {
@@ -22,7 +21,6 @@ export default function Home() {
         <Trust />
       </main>
       <LocationFooter />
-      <PreviewNotice />
     </>
   );
 }
