@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+@theme {
+  --color-carbon: #0a0b0b;
+  --color-graphite: #101112;
+  --color-graphite-2: #171819;
+  --color-bone: #f3f1ec;
+  --color-ash: #9a9a96;
+  --color-champagne: #c7a66a;
+  --color-line: rgb(243 241 236 / 0.12);
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
+
+  --ease-editorial: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@layer base {
+  html {
+    background: var(--color-carbon);
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-carbon);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "tnum" 0;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--color-champagne);
+    color: var(--color-carbon);
+  }
+  :focus-visible {
+    outline: 1px solid var(--color-champagne);
+    outline-offset: 4px;
+  }
+}
+
+@layer components {
+  /* Titulares: Archivo semi-condensada en mayúsculas */
+  .display {
+    font-stretch: 78%;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: -0.012em;
+    line-height: 0.9;
+  }
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+  }
+  .data {
+    font-variant-numeric: tabular-nums;
+  }
+  /* Enlace editorial con subrayado que crece */
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 400ms var(--ease-editorial);
+  }
+  .link-underline:hover,
+  .link-underline[aria-current="page"],
+  .link-underline[aria-pressed="true"] {
+    background-size: 100% 1px;
+  }
+  .arrow {
+    display: inline-block;
+    transition: transform 400ms var(--ease-editorial);
+  }
+  .group:hover .arrow,
+  .group:focus-visible .arrow {
+    transform: translateX(5px);
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Entrada sutil: fade + 16px. Solo si el usuario no pide reducir movimiento. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    animation: reveal 900ms var(--ease-editorial) both;
+    animation-delay: var(--d, 0ms);
+  }
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
