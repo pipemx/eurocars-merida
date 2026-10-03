@@ -1,68 +1,73 @@
 import type { Vehicle, VehicleCategory } from "@/types/vehicle";
 
 /**
- * INVENTARIO DE EJEMPLO — NO ES INVENTARIO REAL DE EUROCARS.
- * Marca/modelo solo ilustran longitudes de texto para la dirección visual.
- * Precio y kilometraje se muestran como "X" (isPlaceholder) y las fotos son fondos neutros.
- * Sustituir por el inventario real (JSON / Supabase / CMS) antes de publicar.
+ * INVENTARIO DEL MOCKUP — datos e imágenes del diseño de referencia, NO verificados como
+ * inventario real de Eurocars. Sustituir por inventario real (JSON / Supabase / CMS).
  */
-const ph = (n: number, label: string) => ({
-  src: `/eurocars/vehicles/placeholder-${n}.webp`,
-  alt: `Fotografía pendiente — ${label}`,
-  width: 1600,
-  height: 1067,
-});
-
-type Seed = [string, string, string, number, VehicleCategory[], string, string];
+type Seed = {
+  brand: string;
+  model: string;
+  version: string;
+  year: number;
+  price: number | null;
+  mileage: number | null;
+  image: string;
+  category: VehicleCategory[];
+};
 
 const seeds: Seed[] = [
-  ["Lamborghini", "Urus", "Performante", 2024, ["exoticos", "suv"], "Automática", "V8 4.0 L biturbo"],
-  ["Porsche", "911", "Carrera S", 2023, ["exoticos", "premium"], "PDK", "6 cil. bóxer 3.0 L biturbo"],
-  ["Mercedes-Benz", "Clase G", "G 500", 2022, ["premium", "suv"], "Automática", "V8 4.0 L biturbo"],
-  ["BMW", "M4", "Competition", 2023, ["premium"], "Automática", "6 cil. 3.0 L biturbo"],
-  ["Porsche", "Taycan", "4S", 2022, ["premium", "electricos"], "Automática", "Eléctrico"],
-  ["Ram", "1500", "TRX", 2023, ["pickups"], "Automática", "V8 6.2 L supercargado"],
+  { brand: "Lamborghini", model: "Aventador", version: "", year: 2021, price: null, mileage: null, image: "mockup-lambo-negro", category: ["exoticos"] },
+  { brand: "Lamborghini", model: "Huracán", version: "STO", year: 2022, price: 8950000, mileage: 8400, image: "mockup-huracan-sto", category: ["exoticos"] },
+  { brand: "Porsche", model: "Macan", version: "", year: 2021, price: 1250000, mileage: 42000, image: "mockup-macan", category: ["premium", "suv"] },
+  { brand: "BMW", model: "X4", version: "M Sport", year: 2020, price: 990000, mileage: 45000, image: "mockup-x4-m-sport", category: ["premium", "suv"] },
+  { brand: "Ford", model: "Raptor", version: "", year: 2022, price: 1590000, mileage: 38000, image: "mockup-raptor", category: ["pickups"] },
+  { brand: "Mercedes-Benz", model: "Clase G", version: "", year: 2023, price: null, mileage: null, image: "mockup-g-class", category: ["premium", "suv"] },
 ];
 
-export const vehicles: Vehicle[] = seeds.map(([brand, model, version, year, category, transmission, engine], i) => ({
-  id: `ejemplo-${i + 1}`,
-  slug: `${brand}-${model}-${version}-${year}`
+const slugify = (s: string) =>
+  s
     .toLowerCase()
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, ""),
-  status: "available",
-  brand,
-  model,
-  version,
-  year,
-  price: null,
-  mileage: null,
-  transmission,
-  engine,
-  drivetrain: null,
-  exteriorColor: null,
-  interiorColor: null,
-  description: "",
-  features: [],
-  coverImage: ph(i + 1, `${brand} ${model} ${version}`),
-  gallery: [],
-  financingAvailable: false,
-  featured: true,
-  category,
-  createdAt: "2026-10-03",
-  updatedAt: "2026-10-03",
-  isPlaceholder: true,
-}));
+    .replace(/(^-|-$)/g, "");
+
+export const vehicles: Vehicle[] = seeds.map((s, i) => {
+  const title = [s.brand, s.model, s.version].filter(Boolean).join(" ");
+  const img = { src: `/eurocars/vehicles/${s.image}.webp`, alt: `${title} ${s.year} en el showroom de Eurocars Mérida`, width: 600, height: 414 };
+  return {
+    id: `mockup-${i + 1}`,
+    slug: slugify(`${title} ${s.year}`),
+    status: "available",
+    brand: s.brand,
+    model: s.model,
+    version: s.version,
+    year: s.year,
+    price: s.price,
+    mileage: s.mileage,
+    transmission: "Automático",
+    engine: null,
+    drivetrain: null,
+    exteriorColor: null,
+    interiorColor: null,
+    description: "",
+    features: [],
+    coverImage: img,
+    gallery: [img],
+    financingAvailable: false,
+    featured: true,
+    category: s.category,
+    createdAt: "2026-10-03",
+    updatedAt: "2026-10-03",
+    isPlaceholder: true,
+  };
+});
 
 export const categories: { id: "todos" | VehicleCategory; label: string }[] = [
   { id: "todos", label: "Todos" },
   { id: "exoticos", label: "Exóticos" },
   { id: "premium", label: "Premium" },
-  { id: "suv", label: "SUV" },
+  { id: "suv", label: "SUVs" },
   { id: "pickups", label: "Pickups" },
   { id: "electricos", label: "Eléctricos" },
-  { id: "familiares", label: "Familiares" },
-  { id: "compactos", label: "Compactos" },
 ];

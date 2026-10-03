@@ -2,16 +2,12 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { nav, site } from "@/content/site";
+import { nav } from "@/content/site";
 import { whatsappHref } from "@/lib/whatsapp";
-import { Wordmark } from "./Logo";
+import { Logo } from "./Logo";
+import { Socials } from "./Socials";
 import { TrackedLink } from "./TrackedLink";
-
-const socials = [
-  { label: "Instagram", short: "IG", href: site.social.instagram },
-  { label: "Facebook", short: "FB", href: site.social.facebook },
-  { label: "TikTok", short: "TT", href: site.social.tiktok },
-] as const;
+import { WhatsappIcon } from "./icons";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -35,106 +31,76 @@ export function Header() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,height,border-color] duration-500 ease-[var(--ease-editorial)] ${
-        solid ? "border-b border-line bg-carbon/85 backdrop-blur-md" : "border-b border-transparent bg-transparent"
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
+        solid ? "border-b border-line bg-carbon/85 backdrop-blur-md" : "border-b border-transparent"
       }`}
     >
-      <div
-        className={`mx-auto flex max-w-[1760px] items-center justify-between gap-6 px-6 transition-[height] duration-500 md:px-10 xl:px-14 ${
-          solid ? "h-16" : "h-20 md:h-24"
-        }`}
-      >
-        <Wordmark className={`shrink-0 transition-[width] duration-500 ${solid ? "w-[124px]" : "w-[136px] md:w-[164px]"}`} />
+      <div className={`container-ec flex items-center justify-between gap-6 transition-[height] duration-500 ${solid ? "h-[68px]" : "h-[84px] md:h-[104px]"}`}>
+        <Logo priority className={`shrink-0 transition-[width] duration-500 ${solid ? "w-[84px]" : "w-[96px] md:w-[124px]"}`} />
 
         <nav aria-label="Principal" className="hidden lg:block">
-          <ul className="flex items-center gap-8 xl:gap-10">
+          <ul className="flex items-center gap-7 xl:gap-11">
+            {nav.map((item) => {
+              const active = item.href === "/";
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={active ? "page" : undefined}
+                    className={`relative block py-2 text-[11px] font-medium uppercase tracking-[0.12em] transition-colors hover:text-bone ${
+                      active ? "text-bone" : "text-bone/85"
+                    }`}
+                  >
+                    {item.label}
+                    <span
+                      aria-hidden
+                      className={`absolute -bottom-2 left-0 h-px bg-champagne transition-[width] duration-300 ${active ? "w-full" : "w-0"}`}
+                    />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        <div className="flex items-center gap-5 xl:gap-9">
+          <Socials location="header" className="hidden xl:flex" />
+          <TrackedLink
+            href={whatsappHref()}
+            event="whatsapp_click"
+            eventParams={{ location: "header" }}
+            className="inline-flex items-center gap-2.5 rounded-[3px] border border-champagne/45 bg-carbon/30 px-4 py-2.5 text-[12px] font-medium text-bone transition-colors hover:border-champagne md:px-6 md:py-3"
+          >
+            <WhatsappIcon className="h-4 w-4" />
+            WhatsApp
+          </TrackedLink>
+          <button
+            type="button"
+            className="-mr-2 flex h-10 w-10 flex-col items-center justify-center gap-[5px] lg:hidden"
+            aria-label={open ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={open}
+            aria-controls="menu-movil"
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span className={`h-px w-6 bg-bone transition-transform ${open ? "translate-y-[3px] rotate-45" : ""}`} />
+            <span className={`h-px w-6 bg-bone transition-transform ${open ? "-translate-y-[3px] -rotate-45" : ""}`} />
+          </button>
+        </div>
+      </div>
+
+      <div id="menu-movil" hidden={!open} className="h-[calc(100svh-68px)] overflow-y-auto bg-carbon px-5 pb-10 pt-6 lg:hidden">
+        <nav aria-label="Principal móvil">
+          <ul className="border-t border-line">
             {nav.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  aria-current={item.href === "/" ? "page" : undefined}
-                  className="link-underline pb-1 text-[12px] font-medium uppercase tracking-[0.16em] text-bone/80 transition-colors hover:text-bone"
-                >
+              <li key={item.href} className="border-b border-line">
+                <Link href={item.href} onClick={() => setOpen(false)} className="serif-title block py-5 text-[2rem]">
                   {item.label}
                 </Link>
               </li>
             ))}
           </ul>
         </nav>
-
-        <div className="flex items-center gap-5">
-          <ul className="hidden items-center gap-4 xl:flex" aria-label="Redes sociales">
-            {socials.map((s) => (
-              <li key={s.short}>
-                <TrackedLink
-                  href={s.href}
-                  event="social_click"
-                  eventParams={{ network: s.label, location: "header" }}
-                  aria-label={s.label}
-                  className="text-[11px] font-medium tracking-[0.2em] text-ash transition-colors hover:text-bone"
-                >
-                  {s.short}
-                </TrackedLink>
-              </li>
-            ))}
-          </ul>
-          <span aria-hidden className="hidden h-4 w-px bg-line xl:block" />
-          <TrackedLink
-            href={whatsappHref()}
-            event="whatsapp_click"
-            eventParams={{ location: "header" }}
-            className="group inline-flex items-center gap-2 border border-bone/25 px-3 py-2 text-[11px] font-medium uppercase tracking-[0.18em] text-bone transition-colors hover:border-champagne hover:text-champagne md:px-4"
-          >
-            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-champagne" />
-            WhatsApp
-          </TrackedLink>
-          <button
-            type="button"
-            className="-mr-2 p-2 text-[11px] font-medium uppercase tracking-[0.2em] text-bone lg:hidden"
-            aria-expanded={open}
-            aria-controls="menu-movil"
-            onClick={() => setOpen((v) => !v)}
-          >
-            {open ? "Cerrar" : "Menú"}
-          </button>
-        </div>
-      </div>
-
-      <div
-        id="menu-movil"
-        hidden={!open}
-        className="h-[calc(100svh-4rem)] overflow-y-auto bg-carbon px-6 pb-10 pt-8 lg:hidden"
-      >
-        <nav aria-label="Principal móvil">
-          <ol className="border-t border-line">
-            {nav.map((item, i) => (
-              <li key={item.href} className="border-b border-line">
-                <Link
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="flex items-baseline gap-5 py-5"
-                >
-                  <span className="data text-[11px] tracking-[0.2em] text-ash">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="display text-[2.4rem] leading-none">{item.label}</span>
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </nav>
-        <ul className="mt-10 flex gap-6" aria-label="Redes sociales">
-          {socials.map((s) => (
-            <li key={s.short}>
-              <TrackedLink
-                href={s.href}
-                event="social_click"
-                eventParams={{ network: s.label, location: "menu" }}
-                className="text-[12px] uppercase tracking-[0.2em] text-ash"
-              >
-                {s.label}
-              </TrackedLink>
-            </li>
-          ))}
-        </ul>
+        <Socials location="menu" className="mt-10" />
       </div>
     </header>
   );
