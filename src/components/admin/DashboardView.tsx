@@ -152,9 +152,14 @@ export function DashboardView({ leads, activity, insight }: { leads: Lead[]; act
                   ))}
                 </ul>
               )}
-              <Link href={`${BASE}/prospectos`} className="btn-primary group mt-6 w-full sm:w-auto">
-                Ver prospectos <ArrowRight className="arrow h-4 w-4" strokeWidth={1.8} aria-hidden />
-              </Link>
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <Link href={`${BASE}/prospectos`} className="btn-primary group w-full sm:w-auto">
+                  Ver prospectos <ArrowRight className="arrow h-4 w-4" strokeWidth={1.8} aria-hidden />
+                </Link>
+                <Link href={`${BASE}/contenido-ia/${insightVehicle.slug}`} className="btn-ghost group w-full !px-5 sm:w-auto">
+                  <Sparkles className="h-4 w-4" strokeWidth={1.6} aria-hidden /> Crear contenido
+                </Link>
+              </div>
               <p className="mt-4 text-[11.5px] leading-snug text-muted">Texto de ejemplo generado con reglas. En producción lo redactará la IA con los datos reales.</p>
             </section>
           )}

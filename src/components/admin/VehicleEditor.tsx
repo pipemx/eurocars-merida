@@ -9,7 +9,6 @@ import { addVehicle, emptyFormValues, restoreVehicle, saveVehicle, vehicleToValu
 import { VehiclePhoto } from "../VehiclePhoto";
 import { DemoTag, Eyebrow, PageHeader, StatusChip } from "./AdminBits";
 import { useAdmin } from "./AdminProviders";
-import { ContentTeaser } from "./ContentTeaser";
 import { Modal } from "./Modal";
 import { VehicleForm } from "./VehicleForm";
 
@@ -71,7 +70,6 @@ const optionalFields: { key: string; label: string; done: (v: AdminVehicle) => b
 export function VehicleEditor({ slug }: { slug: string }) {
   const { vehicles, toast } = useAdmin();
   const [hydrated, setHydrated] = useState(false);
-  const [teaser, setTeaser] = useState(false);
   const [confirmRestore, setConfirmRestore] = useState(false);
   useEffect(() => setHydrated(true), []);
 
@@ -107,9 +105,9 @@ export function VehicleEditor({ slug }: { slug: string }) {
               <ExternalLink className="h-4 w-4" strokeWidth={1.5} aria-hidden /> Ver ficha pública
             </a>
           ) : null}
-          <button type="button" onClick={() => setTeaser(true)} className="btn-ghost group !px-5">
+          <Link href={`${BASE}/contenido-ia/${v.slug}`} className="btn-ghost group !px-5">
             <Sparkles className="h-4 w-4" strokeWidth={1.5} aria-hidden /> Crear contenido
-          </button>
+          </Link>
         </PageHeader>
       </div>
 
@@ -173,7 +171,6 @@ export function VehicleEditor({ slug }: { slug: string }) {
         </aside>
       </div>
 
-      {teaser && <ContentTeaser vehicle={v} onClose={() => setTeaser(false)} />}
       {confirmRestore && (
         <Modal title="Restaurar datos demo" eyebrow="Confirmación" onClose={() => setConfirmRestore(false)}>
           <p className="text-[15px] leading-relaxed text-ink/85">Se descartarán tus cambios de {title} y volverá a los datos originales de la demo.</p>

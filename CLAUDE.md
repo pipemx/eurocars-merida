@@ -35,6 +35,9 @@ Idiomas `/es` y `/en` (middleware propio, sin librerías i18n). Temas Dark/Light
   Datos: `src/data/demo/crm.ts` (14 leads ficticios sobre el inventario demo; KPIs, pendientes, actividad e insight se DERIVAN de ahí),
   `src/services/crm`, `src/services/ai` (insight mock detrás de `InsightProvider`), `src/services/inventory/admin.ts`
   (overrides + vehículos agregados en localStorage; el dataset fuente nunca se modifica)
+- Content Studio (Fase 4): `src/services/ai/` (contrato `ContentGenerator`, `mockContentGenerator`, `content-guard` anti-datos-inventados,
+  borradores en localStorage) y `src/components/admin/studio/`. Detalle en `docs/06-CONTENT-STUDIO.md`
+- Pruebas: `node scripts/test-studio.mjs`, `node scripts/qa-studio.mjs`
 - Pruebas: `node scripts/test-admin.mjs`, `node scripts/qa-admin.mjs` (1440/1024/768/430/390, Dark y Light)
 - Pruebas: `node scripts/test-collections.mjs` (favoritos, comparador, prueba de manejo demo)
 - `src/i18n/` idiomas y diccionarios · `src/app/[locale]/` home y fichas

@@ -9,7 +9,6 @@ import type { AdminVehicle } from "@/services/inventory/admin";
 import { VehiclePhoto } from "../VehiclePhoto";
 import { DemoTag, PageHeader, StatusChip } from "./AdminBits";
 import { useAdmin } from "./AdminProviders";
-import { ContentTeaser } from "./ContentTeaser";
 import { Modal } from "./Modal";
 
 const BASE = "/admin-demo/panel";
@@ -27,7 +26,6 @@ const iconBtn = "grid h-11 w-11 shrink-0 place-items-center text-ink/70 transiti
 
 export function InventoryView() {
   const { vehicles, hasLocalChanges, highlightSlug, toast } = useAdmin();
-  const [teaser, setTeaser] = useState<AdminVehicle | null>(null);
   const [confirmRestore, setConfirmRestore] = useState(false);
 
   const share = async (v: AdminVehicle) => {
@@ -123,10 +121,10 @@ export function InventoryView() {
                       <Pencil className="h-[18px] w-[18px]" strokeWidth={1.5} aria-hidden />
                       <span className="text-[10.5px] uppercase tracking-[0.1em] lg:hidden">Editar</span>
                     </Link>
-                    <button type="button" onClick={() => setTeaser(v)} title="Crear contenido" aria-label={`Crear contenido de ${title}`} className={`${iconBtn} max-lg:w-full max-lg:flex-col max-lg:gap-1 max-lg:py-2`}>
+                    <Link href={`${BASE}/contenido-ia/${v.slug}`} title="Crear contenido" aria-label={`Crear contenido de ${title}`} className={`${iconBtn} max-lg:w-full max-lg:flex-col max-lg:gap-1 max-lg:py-2`}>
                       <Sparkles className="h-[18px] w-[18px]" strokeWidth={1.5} aria-hidden />
                       <span className="text-[10.5px] uppercase tracking-[0.1em] lg:hidden">Contenido</span>
-                    </button>
+                    </Link>
                     <button type="button" onClick={() => share(v)} title="Compartir" aria-label={`Compartir ${title}`} className={`${iconBtn} max-lg:w-full max-lg:flex-col max-lg:gap-1 max-lg:py-2`}>
                       <Share2 className="h-[18px] w-[18px]" strokeWidth={1.5} aria-hidden />
                       <span className="text-[10.5px] uppercase tracking-[0.1em] lg:hidden">Compartir</span>
@@ -138,8 +136,6 @@ export function InventoryView() {
           })}
         </ul>
       </div>
-
-      {teaser && <ContentTeaser vehicle={teaser} onClose={() => setTeaser(null)} />}
 
       {confirmRestore && (
         <Modal title="Restaurar datos demo" eyebrow="Confirmación" onClose={() => setConfirmRestore(false)}>

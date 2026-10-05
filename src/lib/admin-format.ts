@@ -46,3 +46,13 @@ export const categoryLabel: Record<Vehicle["category"][number], string> = {
   pickups: "Pickups",
   compactos: "Compactos",
 };
+
+/** "Hoy, 10:42" si es de hoy; si no, "5 oct 2026". */
+export function formatSaved(iso: string) {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  const now = new Date();
+  const sameDay = d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && d.getDate() === now.getDate();
+  const time = `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+  return sameDay ? `Hoy, ${time}` : `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}

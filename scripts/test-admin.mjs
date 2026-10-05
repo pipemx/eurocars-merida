@@ -64,7 +64,7 @@ check(/Nueva consulta/.test(act) && /Vehículo compartido/.test(act) && /Solicit
 await page.screenshot({ path: "qa/functional/admin-dashboard-1440.png", fullPage: true });
 
 // ---------- NAVEGACIÓN (secciones preparadas) ----------
-for (const [name, path] of [["Prospectos", "prospectos"], ["Seguimientos", "seguimientos"], ["Contenido IA", "contenido-ia"], ["Resumen diario", "resumen-diario"]]) {
+for (const [name, path] of [["Prospectos", "prospectos"], ["Seguimientos", "seguimientos"], ["Resumen diario", "resumen-diario"]]) {
   await page.goto(`${base}/admin-demo/panel/${path}`, { waitUntil: "load" });
   check((await page.locator("main").innerText()).includes("Esta función forma parte de la siguiente etapa del demo."), `sección "${name}" muestra pantalla de siguiente etapa`);
 }
@@ -80,9 +80,10 @@ for (const label of ["Ver ficha pública", "Editar", "Crear contenido", "Compart
   check((await page.locator(`[title="${label}"]`).count()) >= 8, `acción "${label}" en cada fila`);
 }
 await page.locator('[title="Crear contenido"]').first().click();
-check((await page.getByText("Generación inteligente disponible en la siguiente etapa del demo.").count()) === 1, "Crear contenido muestra adelanto (no ejecuta IA)");
-await page.keyboard.press("Escape");
-check((await page.getByRole("dialog").count()) === 0, "Escape cierra el adelanto");
+await page.waitForURL(/contenido-ia\//);
+check(true, "Crear contenido abre Content Studio (Fase 4)");
+await page.goBack();
+await page.waitForTimeout(500);
 await page.screenshot({ path: "qa/functional/admin-inventario-1440.png", fullPage: true });
 
 // ---------- ALTA ----------

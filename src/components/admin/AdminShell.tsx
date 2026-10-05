@@ -16,7 +16,7 @@ const items: Item[] = [
   { id: "inventario", label: "Inventario", href: `${BASE}/inventario`, icon: Car },
   { id: "prospectos", label: "Prospectos", href: `${BASE}/prospectos`, icon: Users, soon: true },
   { id: "seguimientos", label: "Seguimientos", href: `${BASE}/seguimientos`, icon: BellRing, soon: true },
-  { id: "contenido", label: "Contenido IA", href: `${BASE}/contenido-ia`, icon: Sparkles, soon: true },
+  { id: "contenido", label: "Contenido IA", href: `${BASE}/contenido-ia`, icon: Sparkles },
   { id: "diario", label: "Resumen diario", href: `${BASE}/resumen-diario`, icon: Mail, soon: true },
 ];
 
