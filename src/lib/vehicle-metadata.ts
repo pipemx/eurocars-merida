@@ -22,7 +22,8 @@ export async function vehicleMetadata(locale: Locale, slug: string): Promise<Met
   // Sin fotografía real todavía: imagen de marca de la home (nunca la foto de otro vehículo).
   // Con fotografía: JPG 1200×630 en /eurocars/og/ (mejor compatibilidad con WhatsApp/Facebook que WebP).
   const cover = v.gallery[0];
-  const og = cover ? cover.src.replace("/eurocars/vehicles/", "/eurocars/og/").replace(/\.webp$/, ".jpg") : "/eurocars/og/home.jpg";
+  // Fotos del inventario: og.jpg 1200×630 junto a las imágenes de la unidad (scripts/import-public-inventory.mjs).
+  const og = cover ? (cover.src.startsWith("/eurocars/inventory/") ? cover.src.replace(/\/[^/]+$/, "/og.jpg") : cover.src.replace("/eurocars/vehicles/", "/eurocars/og/").replace(/\.webp$/, ".jpg")) : "/eurocars/og/home.jpg";
   const ogAlt = cover ? cover.alt : `${name} — ${t.inventory.photoPending}`;
   return {
     title,

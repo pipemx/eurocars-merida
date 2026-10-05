@@ -130,8 +130,8 @@ check((await page.locator('section[aria-label="Cifras del día"] li').first().in
 const x7 = "bmw-x7-m60-sport-2024";
 await page.goto(`${base}/admin-demo/panel/inventario/${x7}`, { waitUntil: "load" });
 await page.waitForTimeout(500);
-check((await page.locator("#f-year").inputValue()) === "2024" && (await page.locator("#f-price").inputValue()) === "", "edición: datos conocidos cargados, desconocidos vacíos");
-check((await page.locator("main").innerText()).includes("0 de 7 datos opcionales completos"), "indicador de ficha incompleta");
+check((await page.locator("#f-year").inputValue()) === "2024" && (await page.locator("#f-price").inputValue()) === "1549000" && (await page.locator("#f-color").inputValue()) === "", "edición: datos conocidos cargados, desconocidos vacíos");
+check((await page.locator("main").innerText()).includes("5 de 7 datos opcionales completos"), "indicador de ficha incompleta (faltan color y transmisión)");
 await page.locator("#f-price").fill("1,250,000");
 await page.locator("#f-color").fill("Negro");
 await page.getByRole("button", { name: "Guardar cambios" }).click();
@@ -141,7 +141,7 @@ check(ov?.[x7]?.price === 1250000 && ov[x7].exteriorColor === "Negro", "override
 check((await page.getByText("El dataset original no se modificó").count()) >= 1, "confirmación de guardado local");
 const pub = await page.request.get(`${base}/es/inventario/${x7}`);
 const pubHtml = await pub.text();
-check(pubHtml.includes("Precio a consultar") && !pubHtml.includes("1,250,000"), "el dataset/ficha pública NO cambió (override solo local)");
+check(pubHtml.includes("1,549,000") && !pubHtml.includes("1,250,000"), "el dataset/ficha pública NO cambió (override solo local)");
 await page.goto(base + "/admin-demo/panel/inventario", { waitUntil: "load" });
 await page.waitForTimeout(500);
 check(/editado/i.test(await page.locator("main").innerText()), "inventario marca 'Editado'");
@@ -151,7 +151,7 @@ await page.getByRole("button", { name: /Restaurar datos demo/ }).first().click()
 await page.getByRole("dialog").getByRole("button", { name: "Restaurar" }).click();
 await page.waitForTimeout(400);
 check(!(await ls(page, "ec-demo-admin-overrides"))?.[x7], "Restaurar datos demo (vehículo) elimina el override");
-check((await page.locator("#f-price").inputValue()) === "", "el formulario vuelve a los datos originales");
+check((await page.locator("#f-price").inputValue()) === "1549000", "el formulario vuelve a los datos originales");
 
 // ---------- Vehículo agregado: edición + restaurar todo ----------
 await page.goto(base + "/admin-demo/panel/inventario", { waitUntil: "load" });

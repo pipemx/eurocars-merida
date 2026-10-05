@@ -18,14 +18,16 @@ const ls = (page, key) => page.evaluate((k) => JSON.parse(localStorage.getItem(k
 const TABS = ["Descripción web", "SEO", "Instagram", "Facebook", "Marketplace", "WhatsApp", "Texto alternativo", "English"];
 const FORBIDDEN = /caballos|\bhp\b|lujos|última generación|alto desempeño|tecnología|turbo|garantía|financiamiento|crédito|enganche|piel|techo|híbrid|eléctric/i;
 
+const x7 = "marcamin-modelomin-2022-zz"; // vehículo MÍNIMO (solo marca, modelo, año y categoría): todo lo demás null
+const minimal = { id: "added-min", slug: x7, status: "available", brand: "Marcamin", model: "Modelomin", version: "", year: 2022, price: null, mileage: null, transmission: null, engine: null, drivetrain: null, exteriorColor: null, interiorColor: null, description: { es: "", en: "" }, features: { es: [], en: [] }, gallery: [], financingAvailable: false, featured: false, category: ["suv"], createdAt: "2026-10-05", updatedAt: "2026-10-05", isPlaceholder: true, isDemo: true };
+const realX7 = "bmw-x7-m60-sport-2024";
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, permissions: ["clipboard-read", "clipboard-write"] });
-await ctx.addInitScript(() => sessionStorage.setItem("ec-intro", "1"));
+await ctx.addInitScript(([v]) => { sessionStorage.setItem("ec-intro", "1"); if (!localStorage.getItem("ec-demo-admin-added")) localStorage.setItem("ec-demo-admin-added", JSON.stringify([v])); }, [minimal]);
 const page = await ctx.newPage();
 const errors = [];
 page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
 page.on("pageerror", (e) => errors.push(String(e)));
 
-const x7 = "bmw-x7-m60-sport-2024";
 const block = (id) => page.locator(`[data-value="${id}"]`).first();
 const openTab = async (name) => {
   await page.getByRole("tab", { name: new RegExp(name, "i") }).click();
@@ -43,7 +45,7 @@ const allTabsText = async () => {
 // ---------- BIBLIOTECA ----------
 await page.goto(`${base}/admin-demo/panel/contenido-ia`, { waitUntil: "load" });
 await page.waitForTimeout(600);
-check((await page.locator("[data-status]:visible").count()) === 8 && (await page.locator("[data-status]:visible").allInnerTexts()).every((t) => /sin generar/i.test(t)), "biblioteca: 8 vehículos 'Sin generar'");
+check((await page.locator("[data-status]:visible").count()) === 9 && (await page.locator("[data-status]:visible").allInnerTexts()).every((t) => /sin generar/i.test(t)), "biblioteca: 9 vehículos 'Sin generar'");
 check(!/próximamente|pronto/i.test(await page.locator("aside").innerText()) || true, "sidebar");
 const sideText = await page.locator("aside").innerText();
 check(!/Contenido IA\s*\n?\s*PRONTO/i.test(sideText.replace(/\n/g, " ")), "sidebar: 'Contenido IA' ya no dice Pronto");
@@ -52,7 +54,7 @@ check(!/Contenido IA\s*\n?\s*PRONTO/i.test(sideText.replace(/\n/g, " ")), "sideb
 await page.goto(`${base}/admin-demo/panel/contenido-ia/${x7}`, { waitUntil: "load" });
 await page.waitForTimeout(700);
 const head = await page.locator("main").innerText();
-check(/Content Studio/i.test(head) && /Año 2024/.test(head) && /Precio: a consultar/.test(head) && /Kilometraje: a consultar/.test(head), "Studio muestra vehículo con Precio y Kilometraje 'a consultar'");
+check(/Content Studio/i.test(head) && /Año 2022/.test(head) && /Precio: a consultar/.test(head) && /Kilometraje: a consultar/.test(head), "Studio muestra vehículo con Precio y Kilometraje 'a consultar'");
 await page.screenshot({ path: "qa/functional/studio-idle.png", fullPage: true });
 
 await page.locator("[data-generate]").click();
@@ -72,15 +74,15 @@ const texts = await allTabsText();
 const all = Object.values(texts).join("\n");
 check(!/\$\s?\d/.test(all) && !/\d\s?km\b/i.test(all) && !/mxn/i.test(all), "X7: no aparece ningún precio ni kilometraje");
 check(!FORBIDDEN.test(all), "X7: sin afirmaciones no verificables (caballos, lujo, turbo, garantía…)");
-check(/BMW X7 M60 Sport 2024/.test(texts["Descripción web"]) && /disponible para consulta en Eurocars Mérida/.test(texts["Descripción web"]) && /SUV/.test(texts["Descripción web"]), "web: nombre, disponibilidad y categoría editorial");
+check(/Marcamin Modelomin 2022/.test(texts["Descripción web"]) && /disponible para consulta en Eurocars Mérida/.test(texts["Descripción web"]) && /SUV/.test(texts["Descripción web"]), "web: nombre, disponibilidad y categoría editorial");
 check(/Consulta disponibilidad, precio, kilometraje, condiciones y detalles directamente con nuestro equipo/.test(texts["Descripción web"]), "web: invita a consultar lo que NO se conoce");
-check(/BMW X7 M60 Sport 2024 en Mérida \| Eurocars/.test(texts["SEO"]) && /bmw-x7-m60-sport-2024/.test(texts["SEO"]) && /Vista previa en Google/i.test(texts["SEO"]) && /buscadores/i.test(texts["SEO"]), "SEO: título, slug, vista previa en Google y nota");
-check(/#EurocarsMerida/.test(texts["Instagram"]) && /#BMWX7/.test(texts["Instagram"]) && /#SUV/.test(texts["Instagram"]), "Instagram: hashtags desde datos conocidos");
-check(/Facebook/i.test(texts["Facebook"]) && /Ver ficha/.test(texts["Facebook"]) && /BMW X7 M60 Sport 2024/.test(texts["Facebook"]), "Facebook: preview con CTA a la ficha");
+check(/Marcamin Modelomin 2022 en Mérida \| Eurocars/.test(texts["SEO"]) && /marcamin-modelomin-2022/.test(texts["SEO"]) && /Vista previa en Google/i.test(texts["SEO"]) && /buscadores/i.test(texts["SEO"]), "SEO: título, slug, vista previa en Google y nota");
+check(/#EurocarsMerida/.test(texts["Instagram"]) && /#MarcaminModelomin/.test(texts["Instagram"]) && /#SUV/.test(texts["Instagram"]), "Instagram: hashtags desde datos conocidos");
+check(/Facebook/i.test(texts["Facebook"]) && /Ver ficha/.test(texts["Facebook"]) && /Marcamin Modelomin 2022/.test(texts["Facebook"]), "Facebook: preview con CTA a la ficha");
 check(/Precio\s*\n?\s*Consultar|Consultar/.test(texts["Marketplace"]) && /Kilometraje/.test(texts["Marketplace"]) && /Mérida, Yucatán/.test(texts["Marketplace"]), "Marketplace: Precio/Kilometraje = Consultar, ubicación");
-check(/localhost:3100\/es\/inventario\/bmw-x7-m60-sport-2024/.test(texts["WhatsApp"]) && /Hola, gracias por tu interés en nuestro BMW X7 M60 Sport 2024/.test(texts["WhatsApp"]) && /El precio y el kilometraje te los confirmamos directamente/.test(texts["WhatsApp"]), "WhatsApp: mensaje con URL + respuesta rápida honesta");
-check(/BMW X7 M60 Sport 2024 disponible en Eurocars Mérida/.test(texts["Texto alternativo"]), "ALT: texto basado solo en datos conocidos");
-check(/Meet the BMW X7 M60 Sport 2024/.test(texts["English"]) && /SEO title/i.test(texts["English"]), "English: descripción, SEO title y caption");
+check(/Pídenos fotos y detalles por mensaje/.test(texts["WhatsApp"]) && !/http/.test(texts["WhatsApp"]) && /Hola, gracias por tu interés en nuestro Marcamin Modelomin 2022/.test(texts["WhatsApp"]) && /El precio y el kilometraje te los confirmamos directamente/.test(texts["WhatsApp"]), "WhatsApp: mensaje sin enlace inventado + respuesta rápida honesta");
+check(/Marcamin Modelomin 2022 disponible en Eurocars Mérida/.test(texts["Texto alternativo"]), "ALT: texto basado solo en datos conocidos");
+check(/Meet the Marcamin Modelomin 2022/.test(texts["English"]) && /SEO title/i.test(texts["English"]), "English: descripción, SEO title y caption");
 await openTab("Instagram");
 await page.screenshot({ path: "qa/functional/studio-instagram.png", fullPage: true });
 await openTab("WhatsApp");
@@ -97,12 +99,12 @@ await page.locator("[data-regenerate]").click();
 await page.waitForSelector('[role="tablist"]', { timeout: 6000 });
 await page.waitForTimeout(300);
 const d1 = await block("web-description").textContent();
-check(d0 !== d1 && /BMW X7 M60 Sport 2024/.test(d1) && !/\$\s?\d/.test(d1), "Regenerar produce otra variante sin datos nuevos");
+check(d0 !== d1 && /Marcamin Modelomin 2022/.test(d1) && !/\$\s?\d/.test(d1), "Regenerar produce otra variante sin datos nuevos");
 await page.getByRole("radio", { name: "Directo" }).click();
 await page.waitForSelector('[role="tablist"]', { timeout: 6000 });
 await page.waitForTimeout(300);
 const d2 = await block("web-description").textContent();
-check(d2 !== d1 && d2.startsWith("BMW X7 M60 Sport"), "tono Directo cambia el estilo");
+check(d2 !== d1 && d2.startsWith("Marcamin Modelomin"), "tono Directo cambia el estilo");
 await page.getByRole("radio", { name: "Social" }).click();
 await page.waitForSelector('[role="tablist"]', { timeout: 6000 });
 await page.waitForTimeout(300);
@@ -143,11 +145,11 @@ check((await page.locator("[data-draft-saved]").count()) === 1 && (await page.lo
 check((await block("web-description").textContent()).includes("Texto editado por el equipo."), "el borrador conserva las ediciones");
 await page.goto(`${base}/admin-demo/panel/contenido-ia`, { waitUntil: "load" });
 await page.waitForTimeout(600);
-const row = page.locator("li").filter({ hasText: "X7" }).first();
+const row = page.locator("li").filter({ hasText: "Modelomin" }).first();
 check(/borrador/i.test(await row.innerText()) && /hoy/i.test(await row.innerText()), "biblioteca: X7 = Borrador · Hoy");
-check((await page.locator("[data-status]:visible").allInnerTexts()).filter((t) => /sin generar/i.test(t)).length === 7, "biblioteca: los demás siguen 'Sin generar'");
+check((await page.locator("[data-status]:visible").allInnerTexts()).filter((t) => /sin generar/i.test(t)).length === 8, "biblioteca: los demás siguen 'Sin generar'");
 await page.getByRole("link", { name: /Abrir Studio/ }).click();
-await page.waitForURL(/contenido-ia\/bmw/);
+await page.waitForURL(/contenido-ia\/marcamin/);
 await page.waitForTimeout(700);
 await page.locator("[data-delete]").click();
 await page.getByRole("dialog").getByRole("button", { name: "Eliminar" }).click();
@@ -228,7 +230,7 @@ await ctx.close();
   const m = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
   await m.addInitScript(() => sessionStorage.setItem("ec-intro", "1"));
   const p = await m.newPage();
-  await p.goto(`${base}/admin-demo/panel/contenido-ia/${x7}`, { waitUntil: "load" });
+  await p.goto(`${base}/admin-demo/panel/contenido-ia/${realX7}`, { waitUntil: "load" });
   await p.waitForTimeout(600);
   const s = Date.now();
   await p.locator("[data-generate]").click();

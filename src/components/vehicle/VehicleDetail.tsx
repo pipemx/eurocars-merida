@@ -45,12 +45,12 @@ export function VehicleDetail({ v, locale, related }: { v: Vehicle; locale: Loca
           </nav>
 
           <div className="mt-6 grid gap-10 lg:grid-cols-12 lg:gap-14">
-            <div className="rise lg:col-span-7" style={{ "--d": "100ms" } as React.CSSProperties}>
+            <div className="rise min-w-0 lg:col-span-7" style={{ "--d": "100ms" } as React.CSSProperties}>
               <VehicleGallery images={v.gallery} title={vehicleName(v)} vehicle={v} />
               <p className="mt-4 text-[13px] text-muted">{t.vehicle.moreFotos}</p>
             </div>
 
-            <aside className="lg:col-span-5">
+            <aside className="min-w-0 lg:col-span-5">
               <div className="rise lg:sticky lg:top-[100px]" style={{ "--d": "200ms" } as React.CSSProperties}>
                 <div className="flex items-center justify-between gap-4">
                   <p className="eyebrow flex items-center gap-4 text-muted">
@@ -75,7 +75,7 @@ export function VehicleDetail({ v, locale, related }: { v: Vehicle; locale: Loca
           </div>
 
           <section data-reveal className="reveal mt-20 grid gap-12 lg:grid-cols-12 lg:gap-14">
-            <div className="lg:col-span-7">
+            <div className="min-w-0 lg:col-span-7">
               <h2 className="eyebrow flex items-center gap-4 text-muted">
                 <span aria-hidden className="draw-line h-px w-10 bg-accent" />
                 {t.vehicle.specs}
@@ -95,7 +95,7 @@ export function VehicleDetail({ v, locale, related }: { v: Vehicle; locale: Loca
                 <p className="mt-3 max-w-[56ch] text-[12px] leading-snug text-muted">{t.vehicle.categoryNote}</p>
               </div>
             </div>
-            <div className="lg:col-span-5">
+            <div className="min-w-0 lg:col-span-5">
               <h2 className="eyebrow flex items-center gap-4 text-muted">
                 <span aria-hidden className="draw-line h-px w-10 bg-accent" />
                 {t.vehicle.description}

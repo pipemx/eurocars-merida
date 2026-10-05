@@ -76,10 +76,10 @@ const ls = (page, key) => page.evaluate((k) => JSON.parse(localStorage.getItem(k
   check((await page.locator('[role="columnheader"]').count()) === 4, "tabla con 3 vehículos (+ celda vacía)");
   const rowLabels = await page.locator('[role="rowheader"]').allTextContents();
   check(["Año", "Clasificación", "Precio", "Kilometraje", "Disponibilidad"].every((l) => rowLabels.map((x) => x.trim()).includes(l)), `filas: ${rowLabels.join(", ")}`);
-  check(!rowLabels.some((l) => /Motor|Transmisión|Tracción|Color/.test(l)), "no hay filas técnicas sin datos (motor/transmisión/tracción/color)");
+  check(rowLabels.some((l) => /Motor/i.test(l)) && !rowLabels.some((l) => /Transmisión|Color/i.test(l)), "filas técnicas solo si hay dato: Motor sí; Transmisión/Color (sin datos en los 3) no");
   const text = await page.locator('[role="table"]').innerText();
-  check(!/\$\d/.test(text) && !/\d+\s?km/.test(text), "no aparece ningún precio ni km inventado");
-  check((text.match(/Consultar/g) ?? []).length === 6, "precio y km = 'Consultar' en los 3 vehículos");
+  check(/\$8,499,000 MXN/.test(text) && /7,000 km/.test(text), "precios y km reales del inventario público");
+  check(!/Consultar/.test(text), "ya no hay 'Consultar' (los 3 tienen precio y km)");
   check(text.includes("2024") && text.includes("2019"), "años correctos");
   await page.screenshot({ path: "qa/functional/comparar-3.png", fullPage: true });
 
@@ -105,13 +105,13 @@ const ls = (page, key) => page.evaluate((k) => JSON.parse(localStorage.getItem(k
   await page.goto(`${base}/es/inventario/${slug}`, { waitUntil: "load" });
   await page.waitForTimeout(800);
   const body = await page.locator("main").innerText();
-  check(body.includes("Kilometraje a consultar") && body.includes("Precio a consultar"), "ficha: 'Precio a consultar' y 'Kilometraje a consultar'");
+  check(body.includes("$1,549,000 MXN") && body.includes("55,000 km"), "ficha X7: precio y kilometraje reales");
   check(!/Automático/.test(body), "ficha ya no afirma 'Automático'");
-  check((await page.locator('[role="img"][aria-label*="Fotografía pendiente"]').count()) >= 1, "ficha muestra placeholder 'Fotografía pendiente'");
+  check((await page.locator('[role="img"][aria-label*="Fotografía pendiente"]').count()) === 0, "ficha con fotografías reales (sin placeholder)");
   const ld = JSON.parse(await page.locator('script[type="application/ld+json"]').first().innerText());
-  check(ld["@type"] === "Car" && !("offers" in ld) && !("mileageFromOdometer" in ld) && !("image" in ld) && !("vehicleEngine" in ld), `JSON-LD mínimo sin datos inexistentes (${Object.keys(ld).join(",")})`);
+  check(ld["@type"] === "Car" && ld.offers?.price === 1549000 && ld.mileageFromOdometer?.value === 55000 && !("color" in ld), `JSON-LD solo con datos existentes (${Object.keys(ld).join(",")})`);
   check((await page.locator('link[rel="alternate"][hreflang="en"]').getAttribute("href"))?.endsWith(`/en/inventory/${slug}`), "hreflang EN apunta a la ficha EN");
-  check((await page.locator('meta[property="og:image"]').getAttribute("content"))?.endsWith("/eurocars/og/home.jpg"), "og:image = imagen de marca (no foto de otro auto)");
+  check((await page.locator('meta[property="og:image"]').getAttribute("content"))?.endsWith("/eurocars/inventory/bmw-x7-m60-sport-2024/og.jpg"), "og:image = imagen propia de la unidad");
 
   await page.getByRole("button", { name: /Guardar 2024 BMW X7 M60 Sport en favoritos/ }).click();
   check((await ls(page, "ec-favorites")).includes(slug), "ficha: favorito guarda");
@@ -146,7 +146,7 @@ const ls = (page, key) => page.evaluate((k) => JSON.parse(localStorage.getItem(k
   await page.goto(`${base}/en/inventory/toyota-supra-gr-2020`, { waitUntil: "load" });
   await page.waitForTimeout(600);
   check((await page.getByRole("button", { name: /Save 2020 Toyota Supra GR to favorites/ }).count()) === 1, "EN: botón favoritos traducido");
-  check((await page.locator("main").innerText()).includes("Mileage on request"), "EN: 'Mileage on request'");
+  check((await page.locator("main").innerText()).includes("15,000 km"), "EN: kilometraje real");
   await page.goto(`${base}/en/favorites`, { waitUntil: "load" });
   check((await page.getByRole("heading", { level: 1 }).textContent()) === "Your favorites", "EN: /en/favorites");
   await page.goto(`${base}/en/compare`, { waitUntil: "load" });
