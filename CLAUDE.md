@@ -10,6 +10,20 @@ Idiomas `/es` y `/en` (middleware propio, sin librerías i18n). Temas Dark/Light
   4 tamaños × 3 páginas × 2 temas; debe terminar en "problemas: 0").
   Si Playwright usa otro Chromium, define `PW_CHROMIUM=/ruta/al/chromium`.
 
+## Reglas de trabajo (obligatorias)
+1. **No inventar datos.** Precios, reseñas, horarios, condiciones de crédito y autos no verificados
+   se marcan como demo o pendiente (ver `docs/03-CONTENIDO-PENDIENTE.md`). Nunca presentarlos como reales.
+2. **Alta gama:** la página debe verse premium e impresionante, con la fotografía como protagonista
+   y animaciones cuidadas.
+3. **Dos temas (Dark y Light) con la misma estructura**, y **dos idiomas (ES y EN)**. Todo cambio
+   se aplica a los cuatro casos.
+4. **Móvil primero.** Antes de dar algo por terminado, revisar celular, tablet y escritorio, en
+   ambos temas, sin elementos encimados, textos cortados ni desbordes. Usar `scripts/qa-layout.mjs`
+   y `scripts/screenshots.mjs`.
+5. **Respetar `prefers-reduced-motion`** en toda animación o efecto nuevo.
+6. **Reportar con claridad qué se verificó y qué no se pudo verificar** (p. ej. dominios bloqueados,
+   mapa de Google, vista previa al compartir).
+
 ## Estructura clave
 - `src/content/site.ts` datos del negocio · `src/content/vehicles.ts` inventario demo (ES/EN)
 - `src/i18n/` idiomas y diccionarios · `src/app/[locale]/` home y fichas
