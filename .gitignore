@@ -40,6 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# capturas QA regenerables (scripts/qa-admin.mjs, scripts/test-*.mjs)
-/qa/admin/
-/qa/functional/
+# capturas QA regenerables (scripts/screenshots.mjs, qa-layout.mjs, qa-admin.mjs, test-*.mjs)
+/qa/
