@@ -3,6 +3,9 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { CheckCircle2, TriangleAlert } from "lucide-react";
 import type { Vehicle } from "@/types/vehicle";
+import type { Lead } from "@/types/crm";
+import { pendingFollowUps, type EffectiveLead } from "@/services/crm/rules";
+import { useEffectiveLeads } from "@/services/crm/state";
 import { type AdminVehicle, useAdminInventory } from "@/services/inventory/admin";
 
 type Tone = "ok" | "error";
@@ -10,6 +13,13 @@ type Toast = { id: number; message: string; tone: Tone };
 
 type AdminCtx = {
   vehicles: AdminVehicle[];
+  /** Prospectos efectivos (dataset CRM + cambios locales). */
+  leads: EffectiveLead[];
+  hasCrmChanges: boolean;
+  /** Seguimientos pendientes (vencidos + hoy), para el contador del menú. */
+  pendingCount: number;
+  /** Nombre del vehículo por slug: "BMW X7 M60 Sport", "BMW X7 M60 Sport 2024" y "BMW X7". */
+  vehicleNames: (slug: string) => { title: string; full: string; short: string };
   editedCount: number;
   addedCount: number;
   hasLocalChanges: boolean;
@@ -28,8 +38,19 @@ export function useAdmin() {
 }
 
 /** Inventario fusionado (demo + ediciones locales + agregados), resaltado de filas y avisos. */
-export function AdminProviders({ base, children }: { base: Vehicle[]; children: React.ReactNode }) {
+export function AdminProviders({ base, baseLeads, children }: { base: Vehicle[]; baseLeads: Lead[]; children: React.ReactNode }) {
   const inv = useAdminInventory(base);
+  const { leads, hasCrmChanges } = useEffectiveLeads(baseLeads);
+  const pendingCount = useMemo(() => pendingFollowUps(leads).length, [leads]);
+  const vehicleNames = useMemo(() => {
+    const map = new Map(inv.vehicles.map((v) => [v.slug, v]));
+    return (slug: string) => {
+      const v = map.get(slug);
+      if (!v) return { title: slug, full: slug, short: slug };
+      const title = [v.brand, v.model, v.version].filter(Boolean).join(" ");
+      return { title, full: `${title} ${v.year}`, short: `${v.brand} ${v.model}` };
+    };
+  }, [inv.vehicles]);
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [highlightSlug, setHighlightSlug] = useState<string | null>(null);
   const seq = useRef(0);
@@ -48,7 +69,7 @@ export function AdminProviders({ base, children }: { base: Vehicle[]; children: 
     timers.current.push(window.setTimeout(() => setHighlightSlug((cur) => (cur === slug ? null : cur)), 4500));
   }, []);
 
-  const value = useMemo<AdminCtx>(() => ({ ...inv, highlightSlug, highlight, toast }), [inv, highlightSlug, highlight, toast]);
+  const value = useMemo<AdminCtx>(() => ({ ...inv, leads, hasCrmChanges, pendingCount, vehicleNames, highlightSlug, highlight, toast }), [inv, leads, hasCrmChanges, pendingCount, vehicleNames, highlightSlug, highlight, toast]);
 
   return (
     <Ctx.Provider value={value}>

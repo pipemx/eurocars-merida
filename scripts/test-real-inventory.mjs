@@ -107,12 +107,6 @@ for (const [slug, price, km, extra] of [[urus, "$8,499,000 MXN", "7,000 km", "Ak
   if (slug === urus) await page.screenshot({ path: "qa/functional/real-studio-urus-instagram.png", fullPage: true });
 }
 
-// ---------- Admin: inventario con fotos ----------
-await page.goto(`${base}/admin-demo/panel`, { waitUntil: "load" });
-await page.waitForTimeout(800);
-const kpi = await page.locator('section[aria-label="Cifras del día"] li').first().innerText();
-check(/0 sin fotografía|Todos con fotografía|^\D*8/m.test(kpi) && !/sin fotografía real/.test(kpi), "dashboard: el KPI de inventario ya no reporta vehículos sin fotografía");
-
 check(badImages.length === 0, `ninguna imagen rota (${badImages.slice(0, 3).join(", ")})`);
 check(errors.length === 0, `sin errores de consola (${errors.join(" | ").slice(0, 300)})`);
 await ctx.close();

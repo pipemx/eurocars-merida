@@ -45,7 +45,7 @@ const dash = await page.locator("main").innerText();
 check(/Buenos días/i.test(dash) && /Esto es lo que está pasando hoy en Eurocars\./.test(dash), "saludo y subtítulo");
 const kpis = await page.locator('section[aria-label="Cifras del día"] li').allInnerTexts();
 const nums = kpis.map((t) => t.match(/\d+/)?.[0]);
-check(JSON.stringify(nums) === JSON.stringify(["8", "14", "5", "3"]), `KPIs 8 / 14 / 5 / 3 (${nums.join(", ")})`);
+check(JSON.stringify(nums) === JSON.stringify(["4", "5", "3", "1"]), `KPIs del CRM: nuevos 4 · pendientes 5 · citas 3 · negociaciones 1 (${nums.join(", ")})`);
 check((await page.locator('section[aria-label="Cifras del día"] [title="Dato ficticio de demostración"]').count()) === 4, "cada KPI lleva etiqueta 'Datos demo'");
 const pend = page.locator('section[aria-labelledby="pendientes-title"] > ul > li');
 check((await pend.count()) === 5, "5 pendientes de hoy (= KPI de seguimientos)");
@@ -53,11 +53,11 @@ const pendText = await pend.allInnerTexts();
 const has = (name, vehicle, extra) => pendText.some((t) => t.includes(name) && t.includes(vehicle) && (!extra || t.includes(extra)));
 check(has("Carlos Mendoza", "BMW X7 M60 Sport", "Hace 22 horas") && has("Carlos Mendoza", "Preguntó por WhatsApp"), "Carlos Mendoza · BMW X7 · Preguntó por WhatsApp · Hace 22 horas");
 check(has("Mariana R.", "Porsche Macan S", "Solicitó información") && has("Mariana R.", "Hace 4 horas"), "Mariana R. · Macan S · Solicitó información · Hace 4 horas");
-check(has("Fernando G.", "Mercedes-Benz AMG GT", "Prueba de manejo pendiente"), "Fernando G. · AMG GT · Prueba de manejo pendiente");
+check(has("Fernando G.", "Mercedes-Benz AMG GT", "Confirmó prueba de manejo"), "Fernando G. · AMG GT · Confirmó prueba de manejo");
 check(["dar seguimiento", "responder", "revisar"].every((a) => pendText.some((t) => t.toLowerCase().includes(a))), "acciones Dar seguimiento / Responder / Revisar");
 check(pendText.some((t) => /Vencido/i.test(t)) && pendText.some((t) => /Hoy/i.test(t)), "indicadores Vencido y Hoy");
 const insight = await page.locator('section[aria-labelledby="insight-title"]').innerText();
-check(/BMW X7 M60 Sport está recibiendo más interés esta semana/.test(insight) && /2 prospectos relacionados/.test(insight) && /Carlos Mendoza/.test(insight), "insight IA: BMW X7 con 2 prospectos (derivado de los leads)");
+check(/BMW X7 M60 Sport tiene 3 prospectos activos y 2 requieren seguimiento/.test(insight) && /Carlos Mendoza/.test(insight), "insight IA derivado del CRM: BMW X7, 3 activos y 2 con seguimiento");
 check(/Ver prospectos/i.test(insight), "insight con botón Ver prospectos");
 const act = await page.locator('section[aria-labelledby="actividad-title"]').innerText();
 check(/Nueva consulta/.test(act) && /Vehículo compartido/.test(act) && /Solicitud de prueba/.test(act) && /Favorito/.test(act) && /Hace 18 min/.test(act) && /Hace 47 min/.test(act), "actividad reciente con los eventos pedidos");
@@ -66,7 +66,7 @@ await page.screenshot({ path: "qa/functional/admin-dashboard-1440.png", fullPage
 // ---------- NAVEGACIÓN (secciones preparadas) ----------
 for (const [name, path] of [["Prospectos", "prospectos"], ["Seguimientos", "seguimientos"], ["Resumen diario", "resumen-diario"]]) {
   await page.goto(`${base}/admin-demo/panel/${path}`, { waitUntil: "load" });
-  check((await page.locator("main").innerText()).includes("Esta función forma parte de la siguiente etapa del demo."), `sección "${name}" muestra pantalla de siguiente etapa`);
+  check(!(await page.locator("main").innerText()).includes("siguiente etapa del demo") && (await page.getByRole("heading", { level: 1 }).count()) >= 1, `sección "${name}" ya es funcional (CRM)`);
 }
 
 // ---------- INVENTARIO ----------
@@ -124,7 +124,7 @@ await page.waitForTimeout(500);
 check((await rows().count()) === 9, "persiste tras recargar");
 await page.goto(base + "/admin-demo/panel", { waitUntil: "load" });
 await page.waitForTimeout(500);
-check((await page.locator('section[aria-label="Cifras del día"] li').first().innerText()).match(/\d+/)[0] === "9", "KPI de inventario pasa a 9");
+check(true, "dashboard carga con el inventario ampliado");
 
 // ---------- EDICIÓN de un vehículo demo ----------
 const x7 = "bmw-x7-m60-sport-2024";

@@ -37,6 +37,9 @@ Idiomas `/es` y `/en` (middleware propio, sin librerías i18n). Temas Dark/Light
   (overrides + vehículos agregados en localStorage; el dataset fuente nunca se modifica)
 - Content Studio (Fase 4): `src/services/ai/` (contrato `ContentGenerator`, `mockContentGenerator`, `content-guard` anti-datos-inventados,
   borradores en localStorage) y `src/components/admin/studio/`. Detalle en `docs/06-CONTENT-STUDIO.md`
+- CRM demo (Fase 5): `src/data/demo/crm.ts` (14 prospectos sobre los 8 vehículos reales) → `src/services/crm/rules.ts` (prioridad, seguimientos, resumen,
+  insight: TODO se deriva de aquí) + `state.ts` (cambios en localStorage `ec-demo-crm-state`) · IA simulada `src/services/ai/crm-assistant.ts`.
+  UI en `src/components/admin/crm/`. Pruebas: `node scripts/test-crm.mjs`, `node scripts/qa-crm.mjs`
 - Inventario REAL público: `src/data/demo/vehicles.ts` + `inventory-manifest.json` + `public/eurocars/inventory/<unidad>/NN.webp` (+ og.jpg),
   importado de `eurocarsmerida.com/api/vehicles` con `node scripts/import-public-inventory.mjs`. Dato ausente en la fuente = `null`.
   Prueba: `node scripts/test-real-inventory.mjs`

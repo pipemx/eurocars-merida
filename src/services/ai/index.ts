@@ -2,18 +2,22 @@ import { AI_PROVIDER } from "./config";
 import { ContentGuardError, auditContent, validateGeneratedContent } from "./content-guard";
 import type { ContentGenerator } from "./content-types";
 import { mockContentGenerator } from "./mock-content-generator";
-import { mockInsightProvider } from "./mock-insights";
-import type { InsightProvider } from "./types";
-
-/** Punto único para obtener el proveedor de insights. Futuro: devolver el de Gemini. */
-export function getInsightProvider(): InsightProvider {
-  return mockInsightProvider;
-}
+import { mockCrmAssistant, type CrmAssistant } from "./crm-assistant";
 
 function baseGenerator(): ContentGenerator {
   switch (AI_PROVIDER) {
     case "mock":
       return mockContentGenerator;
+    default:
+      throw new Error(`Proveedor de IA no configurado: ${AI_PROVIDER}`);
+  }
+}
+
+/** Asistente de CRM (sugerir respuesta / resumir conversación). Hoy mock; mañana Gemini, mismo contrato. */
+export function getCrmAssistant(): CrmAssistant {
+  switch (AI_PROVIDER) {
+    case "mock":
+      return mockCrmAssistant;
     default:
       throw new Error(`Proveedor de IA no configurado: ${AI_PROVIDER}`);
   }
@@ -36,7 +40,7 @@ export function getContentGenerator(): ContentGenerator {
   };
 }
 
-export type { InventoryInsight, InsightInput, InsightProvider } from "./types";
+export type { CrmAssistant, CrmAssistContext } from "./crm-assistant";
 export type { ContentFacts, ContentGenerator, ContentTone, GenerateOptions, GeneratedVehicleContent } from "./content-types";
 export { CONTENT_TONES } from "./content-types";
 export { auditContent, validateGeneratedContent, ContentGuardError } from "./content-guard";

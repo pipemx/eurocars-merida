@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { BellRing, Car, ExternalLink, LayoutDashboard, LogOut, Mail, Menu, Sparkles, Users, X } from "lucide-react";
 import { ThemeSwitcher } from "../ThemeSwitcher";
 import { AdminLogo, DemoTag } from "./AdminBits";
+import { useAdmin } from "./AdminProviders";
 
 const BASE = "/admin-demo/panel";
 
@@ -14,10 +15,10 @@ type Item = { id: string; label: string; href: string; icon: typeof Car; soon?: 
 const items: Item[] = [
   { id: "resumen", label: "Resumen", href: BASE, icon: LayoutDashboard },
   { id: "inventario", label: "Inventario", href: `${BASE}/inventario`, icon: Car },
-  { id: "prospectos", label: "Prospectos", href: `${BASE}/prospectos`, icon: Users, soon: true },
-  { id: "seguimientos", label: "Seguimientos", href: `${BASE}/seguimientos`, icon: BellRing, soon: true },
+  { id: "prospectos", label: "Prospectos", href: `${BASE}/prospectos`, icon: Users },
+  { id: "seguimientos", label: "Seguimientos", href: `${BASE}/seguimientos`, icon: BellRing },
   { id: "contenido", label: "Contenido IA", href: `${BASE}/contenido-ia`, icon: Sparkles },
-  { id: "diario", label: "Resumen diario", href: `${BASE}/resumen-diario`, icon: Mail, soon: true },
+  { id: "diario", label: "Resumen diario", href: `${BASE}/resumen-diario`, icon: Mail },
 ];
 
 function Nav({ pending, onNavigate }: { pending: number; onNavigate?: () => void }) {
@@ -88,7 +89,8 @@ function SidebarBody({ pending, onNavigate }: { pending: number; onNavigate?: ()
 }
 
 /** Marco del panel: sidebar fija en escritorio, barra superior + menú lateral deslizable en móvil/tablet. */
-export function AdminShell({ pending, children }: { pending: number; children: React.ReactNode }) {
+export function AdminShell({ children }: { children: React.ReactNode }) {
+  const { pendingCount: pending } = useAdmin();
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
