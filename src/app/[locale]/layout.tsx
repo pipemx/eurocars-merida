@@ -7,6 +7,7 @@ import { PreferencesProvider, themeInitScript } from "@/components/providers/Pre
 import { RevealObserver } from "@/components/RevealObserver";
 import { Intro } from "@/components/Intro";
 import { CompareBar } from "@/components/CompareBar";
+import { DemoWhatsApp } from "@/components/DemoWhatsApp";
 import { vehicleName } from "@/lib/whatsapp";
 import { getVehicles } from "@/services/inventory";
 import { cormorant, jost } from "@/lib/fonts";
@@ -65,6 +66,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
           <Intro />
           {children}
           <CompareBar items={compareItems} />
+          <DemoWhatsApp />
           <RevealObserver />
         </PreferencesProvider>
       </body>

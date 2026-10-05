@@ -1,6 +1,8 @@
 import { ArrowRight, Star } from "lucide-react";
 import { site } from "@/content/site";
 import type { Dictionary } from "@/i18n/dictionaries";
+import { DEMO_MODE } from "@/lib/demo-mode";
+import { DemoBadge } from "./DemoBadge";
 import { GoogleWordmark } from "./icons";
 import { TrackedLink } from "./TrackedLink";
 
@@ -29,15 +31,24 @@ export function ReviewsSection({ t, locale }: { t: Dictionary; locale: "es" | "e
         >
           <div className="text-center">
             <GoogleWordmark className="text-[1.6rem] leading-none" />
-            <p className="mt-1 font-serif text-[4.2rem] font-medium leading-none tabular-nums">{site.google.rating}</p>
+            <p className="mt-1 font-serif text-[4.2rem] font-medium leading-none tabular-nums">{DEMO_MODE ? "—" : site.google.rating}</p>
           </div>
           <div>
-            <span className="flex gap-1 text-[#e0a526]" role="img" aria-label={t.trust.stars}>
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="h-5 w-5" fill="currentColor" strokeWidth={0} aria-hidden />
-              ))}
-            </span>
-            <p className="mt-2 text-[15px]">{t.trust.reviews(site.google.reviewCount)}</p>
+            {DEMO_MODE ? (
+              <>
+                <DemoBadge label={t.demo.badge} />
+                <p className="mt-2 max-w-[26ch] text-[15px] leading-snug">{t.demo.reviewsPending}</p>
+              </>
+            ) : (
+              <>
+                <span className="flex gap-1 text-[#e0a526]" role="img" aria-label={t.trust.stars}>
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className="h-5 w-5" fill="currentColor" strokeWidth={0} aria-hidden />
+                  ))}
+                </span>
+                <p className="mt-2 text-[15px]">{t.trust.reviews(site.google.reviewCount)}</p>
+              </>
+            )}
             <p className="mt-3 inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.14em] opacity-80 group-hover:opacity-100">
               {locale === "es" ? "Ver reseñas en Google" : "Read Google reviews"} <ArrowRight className="arrow h-4 w-4" strokeWidth={1.6} />
             </p>

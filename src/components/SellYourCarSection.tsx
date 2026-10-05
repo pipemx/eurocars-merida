@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import type { Dictionary } from "@/i18n/dictionaries";
+import { DEMO_MODE } from "@/lib/demo-mode";
 import { whatsappHref } from "@/lib/whatsapp";
 import { TrackedLink } from "./TrackedLink";
 
@@ -24,7 +25,7 @@ export function SellYourCarSection({ t }: { t: Dictionary }) {
             <br />
             {t.sell.titleB}
           </h2>
-          <p className="mt-5 max-w-[46ch] text-[16px] leading-relaxed text-ink/80 md:text-[17px]">{t.sell.body}</p>
+          <p className="mt-5 max-w-[46ch] text-[16px] leading-relaxed text-ink/80 md:text-[17px]">{DEMO_MODE ? t.demo.sellBody : t.sell.body}</p>
           <TrackedLink href={whatsappHref(t.whatsapp.sell)} event="sell_car_start" eventParams={{ source: "home_sell" }} className="btn-primary group mt-8">
             {t.sell.cta} <ArrowRight className="arrow h-4 w-4" strokeWidth={1.8} aria-hidden />
           </TrackedLink>

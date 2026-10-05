@@ -37,6 +37,9 @@ Idiomas `/es` y `/en` (middleware propio, sin librerías i18n). Temas Dark/Light
   (overrides + vehículos agregados en localStorage; el dataset fuente nunca se modifica)
 - Content Studio (Fase 4): `src/services/ai/` (contrato `ContentGenerator`, `mockContentGenerator`, `content-guard` anti-datos-inventados,
   borradores en localStorage) y `src/components/admin/studio/`. Detalle en `docs/06-CONTENT-STUDIO.md`
+- Modo demo (`src/lib/demo-mode.ts`, `NEXT_PUBLIC_DEMO_MODE`; activo salvo `VERCEL_ENV=production`): WhatsApp nunca abre el número real
+  (modal `DemoWhatsApp`), y calificación/reseñas/horario/teléfono/crédito/dirección sin verificar se ocultan o llevan "Dato demo".
+  Probar con `node scripts/test-demo-mode.mjs` (y `--prod` con build `NEXT_PUBLIC_DEMO_MODE=0`)
 - Pruebas: `node scripts/test-studio.mjs`, `node scripts/qa-studio.mjs`
 - Pruebas: `node scripts/test-admin.mjs`, `node scripts/qa-admin.mjs` (1440/1024/768/430/390, Dark y Light)
 - Pruebas: `node scripts/test-collections.mjs` (favoritos, comparador, prueba de manejo demo)

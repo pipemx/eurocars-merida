@@ -1,7 +1,9 @@
 import Image from "next/image";
 import { ArrowRight, Check } from "lucide-react";
 import type { Dictionary } from "@/i18n/dictionaries";
+import { DEMO_MODE } from "@/lib/demo-mode";
 import { whatsappHref } from "@/lib/whatsapp";
+import { DemoBadge } from "./DemoBadge";
 import { TrackedLink } from "./TrackedLink";
 
 export function FinancingSection({ t }: { t: Dictionary }) {
@@ -24,14 +26,21 @@ export function FinancingSection({ t }: { t: Dictionary }) {
             <br />
             {t.financing.titleB}
           </h2>
-          <ul className="mt-7 grid gap-x-10 gap-y-3 text-[15px] sm:grid-cols-2">
-            {t.financing.points.map((p) => (
-              <li key={p} className="flex items-center gap-3">
-                <Check className="h-4 w-4 shrink-0 text-accent" strokeWidth={1.8} aria-hidden />
-                {p}
-              </li>
-            ))}
-          </ul>
+          {DEMO_MODE ? (
+            <p className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 text-[15px]">
+              {t.demo.financingPending}
+              <DemoBadge label={t.demo.badge} />
+            </p>
+          ) : (
+            <ul className="mt-7 grid gap-x-10 gap-y-3 text-[15px] sm:grid-cols-2">
+              {t.financing.points.map((p) => (
+                <li key={p} className="flex items-center gap-3">
+                  <Check className="h-4 w-4 shrink-0 text-accent" strokeWidth={1.8} aria-hidden />
+                  {p}
+                </li>
+              ))}
+            </ul>
+          )}
           <TrackedLink href={whatsappHref(t.whatsapp.financing)} event="finance_click" eventParams={{ source: "home_financing" }} className="btn-primary group mt-9">
             {t.financing.cta} <ArrowRight className="arrow h-4 w-4" strokeWidth={1.8} aria-hidden />
           </TrackedLink>

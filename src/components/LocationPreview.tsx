@@ -4,7 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Clock, MapPin } from "lucide-react";
 import { site } from "@/content/site";
 import { track } from "@/lib/analytics";
+import { DEMO_MODE } from "@/lib/demo-mode";
 import { whatsappHref } from "@/lib/whatsapp";
+import { DemoBadge } from "./DemoBadge";
 import { WhatsappIcon } from "./icons";
 import { usePreferences } from "./providers/Preferences";
 
@@ -50,18 +52,28 @@ export function LocationPreview() {
           <div className="mt-8 space-y-5 text-[15px]">
             <p className="flex items-start gap-4">
               <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-accent" strokeWidth={1.4} aria-hidden />
-              {site.location.label}
+              <span>
+                {DEMO_MODE ? t.demo.addressPending : site.location.label}
+                {DEMO_MODE && <DemoBadge label={t.demo.badge} className="ml-3 align-middle" />}
+              </span>
             </p>
             <div className="flex items-start gap-4">
               <Clock className="mt-0.5 h-5 w-5 shrink-0 text-accent" strokeWidth={1.4} aria-hidden />
-              <dl className="grid grid-cols-[auto_auto] gap-x-8 gap-y-1">
-                {t.location.hours.map((h) => (
-                  <div key={h.days} className="contents">
-                    <dt className="text-muted">{h.days}</dt>
-                    <dd>{h.time}</dd>
-                  </div>
-                ))}
-              </dl>
+              {DEMO_MODE ? (
+                <p>
+                  {t.demo.hoursPending}
+                  <DemoBadge label={t.demo.badge} className="ml-3 align-middle" />
+                </p>
+              ) : (
+                <dl className="grid grid-cols-[auto_auto] gap-x-8 gap-y-1">
+                  {t.location.hours.map((h) => (
+                    <div key={h.days} className="contents">
+                      <dt className="text-muted">{h.days}</dt>
+                      <dd>{h.time}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
             </div>
           </div>
 
@@ -94,7 +106,7 @@ export function LocationPreview() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => track("maps_click", { source: "map_preview" })}
-            aria-label={`${t.location.directions}: ${site.location.label}`}
+            aria-label={`${t.location.directions}: ${DEMO_MODE ? t.demo.addressPending : site.location.label}`}
             className="group relative block overflow-hidden rounded-[2px] ring-1 ring-line shadow-[var(--shadow)]"
           >
             <div ref={box} className="relative aspect-[16/10] bg-surface-2 md:aspect-video">
@@ -110,7 +122,8 @@ export function LocationPreview() {
                   <path d="M700 -20 L 660 470" strokeWidth="3" />
                 </g>
               </svg>
-              {load && (
+              {/* En modo demo no se carga el mapa real: la dirección no está verificada (docs/01). */}
+              {load && !DEMO_MODE && (
                 <iframe
                   title={locale === "es" ? "Mapa de Eurocars Mérida" : "Map of Eurocars Mérida"}
                   src={embedSrc}
@@ -135,7 +148,7 @@ export function LocationPreview() {
               <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-[linear-gradient(0deg,rgb(8_9_9/0.85),transparent)] p-5 text-[#f3f1ec] md:p-6">
                 <div>
                   <p className="serif-title text-[1.5rem] font-normal">Eurocars Mérida</p>
-                  <p className="text-[13px] opacity-80">{site.location.label}</p>
+                  <p className="text-[13px] opacity-80">{DEMO_MODE ? t.demo.addressPending : site.location.label}</p>
                 </div>
                 <span className="flex items-center gap-2 whitespace-nowrap text-[12px] font-semibold uppercase tracking-[0.16em] text-[#c6a66a] md:translate-y-2 md:opacity-0 md:transition-all md:duration-500 md:group-hover:translate-y-0 md:group-hover:opacity-100">
                   {t.location.directions} <ArrowUpRight className="h-4 w-4" strokeWidth={1.8} />

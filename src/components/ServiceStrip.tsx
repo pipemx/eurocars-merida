@@ -1,7 +1,10 @@
 import { BadgeDollarSign, Handshake, RefreshCw, UserRound } from "lucide-react";
 import type { Dictionary } from "@/i18n/dictionaries";
+import { DEMO_MODE } from "@/lib/demo-mode";
 
 const icons = [BadgeDollarSign, Handshake, RefreshCw, UserRound];
+/** Financiamiento y consignación sin comisión no están verificados (docs/03): en demo se muestran como "por confirmar". */
+const UNVERIFIED = new Set([0, 1]);
 
 /** Franja de servicios: rompe el ritmo con la superficie opuesta al tema (clara en Dark, carbón en Light). */
 export function ServiceStrip({ t }: { t: Dictionary }) {
@@ -15,7 +18,7 @@ export function ServiceStrip({ t }: { t: Dictionary }) {
               <Icon className="h-6 w-6 shrink-0 opacity-75 md:h-9 md:w-9" strokeWidth={1.1} aria-hidden />
               <p className="text-[11.5px] uppercase leading-[1.5] tracking-[0.1em] md:text-[12.5px] md:tracking-[0.14em]">
                 <span className="block font-medium">{s.a}</span>
-                <span className="block opacity-65">{s.b}</span>
+                <span className="block opacity-65">{DEMO_MODE && UNVERIFIED.has(i) ? t.demo.toConfirm : s.b}</span>
               </p>
             </li>
           );

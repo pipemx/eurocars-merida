@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { site } from "@/content/site";
+import { DEMO_MODE } from "@/lib/demo-mode";
 import { SocialLinks } from "./SocialLinks";
 
 export function Footer({ t, locale }: { t: Dictionary; locale: Locale }) {
@@ -40,7 +41,7 @@ export function Footer({ t, locale }: { t: Dictionary; locale: Locale }) {
             © {new Date().getFullYear()} Eurocars Mérida. {t.footer.rights}
           </p>
           <p>
-            {t.footer.city} · {site.whatsapp.display}
+            {DEMO_MODE ? t.footer.city : `${t.footer.city} · ${site.whatsapp.display}`}
           </p>
         </div>
       </div>

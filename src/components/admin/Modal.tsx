@@ -9,7 +9,7 @@ const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:n
  * Diálogo accesible: foco atrapado, Escape y clic fuera para cerrar, devuelve el foco al abrir.
  * En móvil se ancla abajo (hoja); en pantallas grandes se centra.
  */
-export function Modal({ title, eyebrow, onClose, children, size = "md" }: { title: string; eyebrow?: string; onClose: () => void; children: React.ReactNode; size?: "md" | "lg" }) {
+export function Modal({ title, eyebrow, onClose, children, size = "md", closeLabel = "Cerrar" }: { title: string; eyebrow?: string; onClose: () => void; children: React.ReactNode; size?: "md" | "lg"; closeLabel?: string }) {
   const root = useRef<HTMLDivElement>(null);
   const titleId = useId();
 
@@ -44,7 +44,7 @@ export function Modal({ title, eyebrow, onClose, children, size = "md" }: { titl
   return (
     <div className="fixed inset-0 z-[90] flex items-end justify-center bg-[#080909]/75 backdrop-blur-sm sm:items-center sm:p-6" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
       <div ref={root} role="dialog" aria-modal="true" aria-labelledby={titleId} className={`relative max-h-[92svh] w-full ${size === "lg" ? "max-w-[640px]" : "max-w-[480px]"} overflow-y-auto border border-line-strong/50 bg-bg p-6 text-ink shadow-[var(--shadow)] sm:p-8`}>
-        <button type="button" onClick={onClose} aria-label="Cerrar" className="absolute right-2 top-2 grid h-11 w-11 place-items-center">
+        <button type="button" onClick={onClose} aria-label={closeLabel} className="absolute right-2 top-2 grid h-11 w-11 place-items-center">
           <X className="h-5 w-5" strokeWidth={1.4} />
         </button>
         {eyebrow && (
