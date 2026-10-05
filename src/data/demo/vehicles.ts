@@ -67,5 +67,6 @@ export const demoVehicles: Vehicle[] = seeds.map((s, i) => {
     createdAt: "2026-10-05",
     updatedAt: "2026-10-05",
     isPlaceholder: true,
+    isDemo: true,
   };
 });

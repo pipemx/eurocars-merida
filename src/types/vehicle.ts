@@ -44,4 +44,6 @@ export interface Vehicle {
   updatedAt: string;
   /** true mientras el registro sea de demostración y no inventario real verificado. */
   isPlaceholder?: boolean;
+  /** Marca interna: registro de la demo (dataset demo o agregado desde el panel), nunca inventario real. */
+  isDemo?: boolean;
 }

@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# capturas QA regenerables (scripts/qa-admin.mjs, scripts/test-*.mjs)
+/qa/admin/
+/qa/functional/

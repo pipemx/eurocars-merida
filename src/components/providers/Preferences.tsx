@@ -24,14 +24,15 @@ export const THEME_KEY = "ec-theme";
  */
 export const themeInitScript = `(function(){try{var t=localStorage.getItem("${THEME_KEY}");if(t!=="dark"&&t!=="light"){t=window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="dark"}})();`;
 
-export function PreferencesProvider({ locale, children }: { locale: Locale; children: React.ReactNode }) {
+/** `persistLocale=false` (admin demo) evita escribir la cookie de idioma del sitio público. */
+export function PreferencesProvider({ locale, children, persistLocale = true }: { locale: Locale; children: React.ReactNode; persistLocale?: boolean }) {
   const t = useMemo(() => getDictionary(locale), [locale]);
   const [theme, setThemeState] = useState<Theme>("dark");
 
   useEffect(() => {
     setThemeState(document.documentElement.dataset.theme === "light" ? "light" : "dark");
-    document.cookie = `ec-locale=${locale};path=/;max-age=31536000;samesite=lax`;
-  }, [locale]);
+    if (persistLocale) document.cookie = `ec-locale=${locale};path=/;max-age=31536000;samesite=lax`;
+  }, [locale, persistLocale]);
 
   const setTheme = useCallback((next: Theme) => {
     const root = document.documentElement;

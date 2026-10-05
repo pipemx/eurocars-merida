@@ -17,5 +17,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next|api|eurocars|favicon|robots.txt|sitemap.xml|.*\\..*).*)"],
+  matcher: ["/((?!_next|api|admin-demo|eurocars|favicon|robots.txt|sitemap.xml|.*\\..*).*)"],
 };

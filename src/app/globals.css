@@ -723,3 +723,22 @@ html.theme-transition *::after {
     }
   }
 }
+
+/* Admin demo: barrido dorado al entrar al panel (se omite con reduced-motion desde el componente) */
+.admin-sweep {
+  transform-origin: center;
+  animation: admin-sweep 800ms var(--ease-editorial) both;
+}
+@keyframes admin-sweep {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}

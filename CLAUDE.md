@@ -31,6 +31,11 @@ Idiomas `/es` y `/en` (middleware propio, sin librerías i18n). Temas Dark/Light
   (localStorage vía `storage/local-list-store.ts`), `src/services/inquiries` (prueba de manejo demo)
 - `VehiclePhoto` = placeholder "Fotografía pendiente" mientras `gallery` esté vacío (TEMPORAL; no reusar fotos de otros autos)
 - Rutas: `/{es,en}/inventario|inventory/[slug]`, `favoritos|favorites`, `comparar|compare`
+- Admin demo (`/admin-demo`, solo español, noindex por metadata + X-Robots-Tag): `src/app/admin-demo/`, `src/components/admin/`.
+  Datos: `src/data/demo/crm.ts` (14 leads ficticios sobre el inventario demo; KPIs, pendientes, actividad e insight se DERIVAN de ahí),
+  `src/services/crm`, `src/services/ai` (insight mock detrás de `InsightProvider`), `src/services/inventory/admin.ts`
+  (overrides + vehículos agregados en localStorage; el dataset fuente nunca se modifica)
+- Pruebas: `node scripts/test-admin.mjs`, `node scripts/qa-admin.mjs` (1440/1024/768/430/390, Dark y Light)
 - Pruebas: `node scripts/test-collections.mjs` (favoritos, comparador, prueba de manejo demo)
 - `src/i18n/` idiomas y diccionarios · `src/app/[locale]/` home y fichas
   (`inventario/[slug]` en ES, `inventory/[slug]` en EN; ambas existen, hreflang correcto)

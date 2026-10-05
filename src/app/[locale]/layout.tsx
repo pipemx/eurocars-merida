@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import { site } from "@/content/site";
 import { hreflang, isLocale, locales } from "@/i18n/config";
@@ -10,27 +9,8 @@ import { Intro } from "@/components/Intro";
 import { CompareBar } from "@/components/CompareBar";
 import { vehicleName } from "@/lib/whatsapp";
 import { getVehicles } from "@/services/inventory";
+import { cormorant, jost } from "@/lib/fonts";
 import "../globals.css";
-
-const jost = localFont({
-  src: [
-    { path: "../../fonts/jost-latin-300-normal.woff2", weight: "300" },
-    { path: "../../fonts/jost-latin-400-normal.woff2", weight: "400" },
-    { path: "../../fonts/jost-latin-500-normal.woff2", weight: "500" },
-    { path: "../../fonts/jost-latin-600-normal.woff2", weight: "600" },
-  ],
-  variable: "--font-jost",
-  display: "swap",
-});
-
-const cormorant = localFont({
-  src: [
-    { path: "../../fonts/cormorant-garamond-latin-400-normal.woff2", weight: "400" },
-    { path: "../../fonts/cormorant-garamond-latin-500-normal.woff2", weight: "500" },
-  ],
-  variable: "--font-cormorant",
-  display: "swap",
-});
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
