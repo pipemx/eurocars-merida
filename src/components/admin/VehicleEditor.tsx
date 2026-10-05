@@ -121,7 +121,7 @@ export function VehicleEditor({ slug }: { slug: string }) {
             onError={(m) => toast(m, "error")}
             onSubmit={(values) => {
               const ok = saveVehicle(v.slug, v.origin, values);
-              if (ok) toast(v.origin === "demo" ? "Cambios guardados localmente. El dataset original no se modificó." : "Cambios guardados.");
+              if (ok) toast(v.origin === "demo" ? "Cambios guardados localmente. El dataset original no se modificó." : "Cambios guardados solo en este navegador (demo).");
               return ok;
             }}
             extra={

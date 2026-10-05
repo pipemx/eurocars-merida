@@ -41,7 +41,7 @@ function Nav({ pending, onNavigate }: { pending: number; onNavigate?: () => void
                 <Icon className={`h-[18px] w-[18px] shrink-0 ${active ? "text-accent" : ""}`} strokeWidth={1.5} aria-hidden />
                 <span className={`flex-1 ${it.soon ? "opacity-80" : ""}`}>{it.label}</span>
                 {it.id === "seguimientos" && pending > 0 && (
-                  <span className="grid h-5 min-w-5 place-items-center rounded-full bg-accent px-1.5 text-[11px] font-semibold leading-none tabular-nums text-accent-ink" aria-label={`${pending} pendientes`}>
+                  <span className="grid h-5 min-w-5 place-items-center rounded-full bg-accent px-1.5 text-[11px] font-semibold leading-none tabular-nums text-accent-ink" title="Dato ficticio de demostración" aria-label={`${pending} pendientes (dato demo)`}>
                     {pending}
                   </span>
                 )}

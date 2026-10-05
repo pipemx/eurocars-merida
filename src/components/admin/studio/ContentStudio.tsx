@@ -141,7 +141,7 @@ export function ContentStudio({ slug }: { slug: string }) {
     const ok = saveContentDraft(slug, { content, tone, variant, savedAt: new Date().toISOString() });
     if (ok) {
       setSavedJson(JSON.stringify(content));
-      toast("Borrador guardado.");
+      toast("Borrador guardado solo en este navegador (demo).");
     } else toast("No se pudo guardar: el navegador rechazó la escritura.", "error");
   };
 
@@ -310,7 +310,7 @@ export function ContentStudio({ slug }: { slug: string }) {
               <DemoTag label="Generado con plantillas (demo)" />
               {draft && !unsaved && (
                 <span data-draft-saved className="inline-flex items-center gap-2 text-[12.5px] text-accent">
-                  <Save className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden /> Borrador guardado · {formatSaved(draft.savedAt)}
+                  <Save className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden /> Borrador guardado (solo en este navegador) · {formatSaved(draft.savedAt)}
                 </span>
               )}
               {unsaved && (draft || edited) && <span className="text-[12.5px] text-[#e0a35a]">Cambios sin guardar</span>}
