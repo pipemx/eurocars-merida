@@ -1,6 +1,6 @@
 "use client";
 
-import { categories, type CategoryId } from "@/content/vehicles";
+import { categories, type CategoryId } from "@/services/inventory/categories";
 import { usePreferences } from "./providers/Preferences";
 
 export function InventoryFilters({ active, counts, onChange }: { active: CategoryId; counts: Record<CategoryId, number>; onChange: (c: CategoryId) => void }) {

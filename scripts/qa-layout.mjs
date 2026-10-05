@@ -13,17 +13,20 @@ const devices = [
   { tag: "430", w: 430, h: 932 },
   { tag: "768", w: 768, h: 1024 },
 ];
-const pages = ["/es", "/es/inventario/lamborghini-aventador-2021", "/en/inventory/porsche-macan-2021"];
+const pages = ["/es", "/es/inventario/lamborghini-urus-performante-2024", "/en/inventory/porsche-macan-s-2019", "/es/favoritos", "/en/compare"];
+// Estado sembrado: favoritos + 3 vehículos en el comparador (para ver la barra flotante y las vistas llenas)
+const seed = { "ec-favorites": ["bmw-x7-m60-sport-2024", "toyota-supra-gr-2020"], "ec-compare": ["lamborghini-urus-performante-2024", "bmw-x7-m60-sport-2024", "porsche-macan-s-2019"] };
 let problems = 0;
 
 for (const theme of ["dark", "light"]) {
   for (const d of devices) {
     for (const path of pages) {
       const ctx = await browser.newContext({ viewport: { width: d.w, height: d.h }, deviceScaleFactor: 2, isMobile: d.w < 768, hasTouch: true });
-      await ctx.addInitScript((t) => {
+      await ctx.addInitScript(([t, s]) => {
         localStorage.setItem("ec-theme", t);
         sessionStorage.setItem("ec-intro", "1");
-      }, theme);
+        for (const [k, v] of Object.entries(s)) localStorage.setItem(k, JSON.stringify(v));
+      }, [theme, seed]);
       const page = await ctx.newPage();
       await page.goto(base + path, { waitUntil: "load" });
       await page.waitForTimeout(1200);

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { categories, type CategoryId } from "@/content/vehicles";
+import { categories, type CategoryId } from "@/services/inventory/categories";
 import type { Vehicle } from "@/types/vehicle";
 import { track } from "@/lib/analytics";
 import { whatsappHref } from "@/lib/whatsapp";

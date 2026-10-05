@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
-import { vehicles } from "@/content/vehicles";
+import { getFeaturedVehicles } from "@/services/inventory";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { ServiceStrip } from "@/components/ServiceStrip";
@@ -24,7 +24,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <main id="contenido">
         <Hero />
         <ServiceStrip t={t} />
-        <InventorySection vehicles={vehicles.filter((v) => v.featured)} />
+        <InventorySection vehicles={await getFeaturedVehicles()} />
         <FinancingSection t={t} />
         <SellYourCarSection t={t} />
         <BrandMarquee />

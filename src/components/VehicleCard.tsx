@@ -1,11 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import type { Vehicle } from "@/types/vehicle";
 import Link from "next/link";
 import { vehicleUrl } from "@/lib/vehicle-url";
+import { CompareButton } from "./CompareButton";
+import { FavoriteButton } from "./FavoriteButton";
 import { ShareVehicleButton } from "./ShareVehicleButton";
+import { VehiclePhoto } from "./VehiclePhoto";
 import { VehicleStatus } from "./VehicleStatus";
 import { usePreferences } from "./providers/Preferences";
 
@@ -17,20 +19,28 @@ const fmt = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
  */
 export function VehicleCard({ vehicle: v }: { vehicle: Vehicle }) {
   const { t, locale } = usePreferences();
-  const specs = [String(v.year), v.mileage !== null ? `${fmt.format(v.mileage)} km` : null, t.inventory.automatic].filter(Boolean) as string[];
+  const specs = [String(v.year), v.mileage !== null ? `${fmt.format(v.mileage)} km` : t.inventory.mileageOnRequest];
   const name = [v.model, v.version].filter(Boolean).join(" ");
 
   return (
     <article className="gold-edge group relative flex h-full flex-col overflow-hidden rounded-[2px] bg-surface ring-1 ring-line shadow-[var(--shadow)] transition-[box-shadow,transform] duration-500 ease-[var(--ease-editorial)] hover:-translate-y-1">
       <div className="sheen relative aspect-[1.45] overflow-hidden bg-surface-2">
-        <Image
-          src={v.coverImage.src}
-          alt={v.coverImage.alt}
-          fill
+        <VehiclePhoto
+          vehicle={v}
+          image={v.gallery[0]}
           sizes="(min-width:1280px) 330px, (min-width:768px) 42vw, 82vw"
-          className="object-cover transition-[transform,filter] duration-[1200ms] ease-[var(--ease-editorial)] group-hover:scale-[1.04] group-hover:contrast-[1.05]"
+          imageClassName="object-cover transition-[transform,filter] duration-[1200ms] ease-[var(--ease-editorial)] group-hover:scale-[1.04] group-hover:contrast-[1.05]"
         />
-        <ShareVehicleButton vehicle={v} className="absolute right-3 top-3" />
+        {/* Wrappers absolutos: los botones llevan su propio `relative` y no pueden posicionarse solos */}
+        <div className="absolute left-3 top-3 z-10">
+          <FavoriteButton vehicle={v} />
+        </div>
+        <div className="absolute right-3 top-3 z-10">
+          <ShareVehicleButton vehicle={v} />
+        </div>
+        <div className="absolute bottom-3 left-3 z-10">
+          <CompareButton vehicle={v} />
+        </div>
       </div>
       <div className="flex flex-1 flex-col px-5 pb-5 pt-5">
         <div className="flex items-start justify-between gap-3">

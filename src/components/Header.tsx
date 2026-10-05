@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { routePath } from "@/i18n/config";
 import { AnimatedEurocarsLogo, eurocarsLogoProps } from "./AnimatedEurocarsLogo";
+import { FavoritesLink } from "./FavoritesLink";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { MobileMenu } from "./MobileMenu";
 import { SocialLinks } from "./SocialLinks";
@@ -27,7 +29,7 @@ export function Header() {
   const { locale, t } = usePreferences();
   const items = useNavItems();
   const pathname = usePathname();
-  const activeId = pathname === `/${locale}` ? "home" : "inventory";
+  const activeId = pathname === `/${locale}` ? "home" : pathname.startsWith(routePath(locale, "inventory")) ? "inventory" : "";
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -89,6 +91,7 @@ export function Header() {
           <div className="flex items-center gap-1 md:gap-3">
             <SocialLinks location="header" className="hidden xl:flex" />
             <span aria-hidden className="mx-2 hidden h-5 w-px bg-line-strong/50 xl:block" />
+            <FavoritesLink />
             <LanguageSwitcher className="hidden md:flex" />
             <ThemeSwitcher className="ml-2 hidden md:flex" />
             <ThemeSwitcher compact className="md:hidden" />

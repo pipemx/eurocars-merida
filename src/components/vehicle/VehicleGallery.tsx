@@ -3,10 +3,11 @@
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight, Expand, X } from "lucide-react";
-import type { VehicleImage } from "@/types/vehicle";
+import type { Vehicle, VehicleImage } from "@/types/vehicle";
 import { usePreferences } from "../providers/Preferences";
+import { VehiclePhoto } from "../VehiclePhoto";
 
-export function VehicleGallery({ images, title }: { images: VehicleImage[]; title: string }) {
+export function VehicleGallery({ images, title, vehicle }: { images: VehicleImage[]; title: string; vehicle: Vehicle }) {
   const { t } = usePreferences();
   const [i, setI] = useState(0);
   const [open, setOpen] = useState(false);
@@ -26,6 +27,14 @@ export function VehicleGallery({ images, title }: { images: VehicleImage[]; titl
       window.removeEventListener("keydown", onKey);
     };
   }, [open, go]);
+
+  if (images.length === 0) {
+    return (
+      <div className="relative aspect-[1.45] w-full overflow-hidden ring-1 ring-line">
+        <VehiclePhoto vehicle={vehicle} sizes="(min-width:1024px) 60vw, 100vw" />
+      </div>
+    );
+  }
 
   const img = images[i];
 

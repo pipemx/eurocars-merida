@@ -14,6 +14,12 @@ export type AnalyticsEvent =
   | "instagram_click"
   | "facebook_click"
   | "tiktok_click"
+  | "favorite_add"
+  | "favorite_remove"
+  | "compare_add"
+  | "compare_remove"
+  | "compare_open"
+  | "test_drive_demo_submit"
   | "theme_changed"
   | "language_changed";
 

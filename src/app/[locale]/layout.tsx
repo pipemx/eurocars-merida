@@ -7,6 +7,9 @@ import { getDictionary } from "@/i18n/dictionaries";
 import { PreferencesProvider, themeInitScript } from "@/components/providers/Preferences";
 import { RevealObserver } from "@/components/RevealObserver";
 import { Intro } from "@/components/Intro";
+import { CompareBar } from "@/components/CompareBar";
+import { vehicleName } from "@/lib/whatsapp";
+import { getVehicles } from "@/services/inventory";
 import "../globals.css";
 
 const jost = localFont({
@@ -71,6 +74,7 @@ export const viewport: Viewport = {
 export default async function LocaleLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
+  const compareItems = (await getVehicles()).map((v) => ({ slug: v.slug, name: vehicleName(v) }));
   return (
     <html lang={hreflang[locale]} data-theme="dark" className={`${jost.variable} ${cormorant.variable}`} suppressHydrationWarning>
       <head>
@@ -80,6 +84,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
         <PreferencesProvider locale={locale}>
           <Intro />
           {children}
+          <CompareBar items={compareItems} />
           <RevealObserver />
         </PreferencesProvider>
       </body>

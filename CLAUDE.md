@@ -25,15 +25,22 @@ Idiomas `/es` y `/en` (middleware propio, sin librerías i18n). Temas Dark/Light
    mapa de Google, vista previa al compartir).
 
 ## Estructura clave
-- `src/content/site.ts` datos del negocio · `src/content/vehicles.ts` inventario demo (ES/EN)
+- `src/content/site.ts` datos del negocio
+- Arquitectura UI → services → data (demo): `src/data/demo/vehicles.ts` (8 autos, todo dato desconocido en `null`),
+  `src/services/inventory` (async, único acceso a vehículos; mañana Supabase), `src/services/favorites|compare`
+  (localStorage vía `storage/local-list-store.ts`), `src/services/inquiries` (prueba de manejo demo)
+- `VehiclePhoto` = placeholder "Fotografía pendiente" mientras `gallery` esté vacío (TEMPORAL; no reusar fotos de otros autos)
+- Rutas: `/{es,en}/inventario|inventory/[slug]`, `favoritos|favorites`, `comparar|compare`
+- Pruebas: `node scripts/test-collections.mjs` (favoritos, comparador, prueba de manejo demo)
 - `src/i18n/` idiomas y diccionarios · `src/app/[locale]/` home y fichas
-  (`inventario/[slug]` en ES, `inventory/[slug]` en EN)
+  (`inventario/[slug]` en ES, `inventory/[slug]` en EN; ambas existen, hreflang correcto)
 - `src/components/` Header, Hero, InventorySection, VehicleCard, ShareVehicleButton,
   LocationPreview (mapa), FloatingWhatsApp, SocialLinks, AnimatedEurocarsLogo, etc.
 - `src/app/globals.css` tokens de tema y todos los efectos/animaciones (respetan reduced-motion)
 - `docs/` auditoría, brief visual, contenido pendiente, mockup de referencia y video original del logo
 
 ## Estado
+Rama de trabajo: `demo/eurocars-ai` (EUROCARS AI — Interactive Demo, por fases; sin push hasta aprobación).
 Es una DEMO para mostrar al cliente. Las fotos son recortes reescalados del mockup
 (`docs/mockup-referencia.webp`) y los autos/precios/km, condiciones de crédito, horario,
 calificación de Google (4.8 / 27) vienen del mockup SIN VERIFICAR (ver `docs/03-CONTENIDO-PENDIENTE.md`).

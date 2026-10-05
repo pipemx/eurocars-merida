@@ -2,11 +2,9 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import type { Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
-import { site } from "@/content/site";
-import { vehicles } from "@/content/vehicles";
 import type { Vehicle } from "@/types/vehicle";
 import { vehicleName, whatsappHref } from "@/lib/whatsapp";
-import { vehicleUrl } from "@/lib/vehicle-url";
+import { vehicleJsonLd } from "@/lib/vehicle-jsonld";
 import { Header } from "../Header";
 import { Footer } from "../Footer";
 import { FloatingWhatsApp } from "../FloatingWhatsApp";
@@ -19,32 +17,18 @@ import { VehicleActions, VehicleStickyBar } from "./VehicleActions";
 
 const fmt = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
 
-export function VehicleDetail({ v, locale }: { v: Vehicle; locale: Locale }) {
+export function VehicleDetail({ v, locale, related }: { v: Vehicle; locale: Locale; related: Vehicle[] }) {
   const t = getDictionary(locale);
   const name = [v.model, v.version].filter(Boolean).join(" ");
-  const related = vehicles.filter((x) => x.id !== v.id && x.category.some((c) => v.category.includes(c))).concat(vehicles.filter((x) => x.id !== v.id)).filter((x, i, a) => a.indexOf(x) === i).slice(0, 3);
 
-  // Datos estructurados solo cuando la unidad sea real (no demo).
-  const jsonLd = !v.isPlaceholder
-    ? {
-        "@context": "https://schema.org",
-        "@type": "Car",
-        name: vehicleName(v),
-        brand: { "@type": "Brand", name: v.brand },
-        model: v.model,
-        vehicleModelDate: String(v.year),
-        mileageFromOdometer: v.mileage !== null ? { "@type": "QuantitativeValue", value: v.mileage, unitCode: "KMT" } : undefined,
-        image: `${site.url}${v.coverImage.src}`,
-        url: `${site.url}${vehicleUrl(locale, v.slug)}`,
-        offers: v.price !== null ? { "@type": "Offer", price: v.price, priceCurrency: "MXN", availability: "https://schema.org/InStock" } : undefined,
-      }
-    : null;
+  // Solo declara datos verificados (ver vehicleJsonLd).
+  const jsonLd = vehicleJsonLd(v, locale);
 
   return (
     <>
       <Header />
       <main id="contenido" className="bg-bg pb-28 pt-[96px] md:pt-[124px] lg:pb-0">
-        {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <div className="container-ec">
           <nav aria-label="Breadcrumb" className="rise text-[12px] tracking-[0.08em] text-muted">
             <ol className="flex flex-wrap items-center gap-2">
@@ -62,7 +46,7 @@ export function VehicleDetail({ v, locale }: { v: Vehicle; locale: Locale }) {
 
           <div className="mt-6 grid gap-10 lg:grid-cols-12 lg:gap-14">
             <div className="rise lg:col-span-7" style={{ "--d": "100ms" } as React.CSSProperties}>
-              <VehicleGallery images={v.gallery} title={vehicleName(v)} />
+              <VehicleGallery images={v.gallery} title={vehicleName(v)} vehicle={v} />
               <p className="mt-4 text-[13px] text-muted">{t.vehicle.moreFotos}</p>
             </div>
 
@@ -78,7 +62,8 @@ export function VehicleDetail({ v, locale }: { v: Vehicle; locale: Locale }) {
                 <h1 className="serif-title mt-4 text-[clamp(2.6rem,5vw,4.2rem)] font-normal">{name}</h1>
                 <p className="mt-3 text-[15px] text-muted">
                   {v.year}
-                  {v.mileage !== null && <> · {fmt.format(v.mileage)} km</>} · {t.inventory.automatic}
+                  {" · "}
+                  {v.mileage !== null ? `${fmt.format(v.mileage)} km` : t.inventory.mileageOnRequest}
                 </p>
                 <p className="mt-7 border-t border-line pt-6 text-[clamp(1.9rem,3vw,2.4rem)] font-medium tabular-nums tracking-[0.01em] text-accent">
                   {v.price !== null ? `$${fmt.format(v.price)} MXN` : t.inventory.priceOnRequest}
@@ -97,6 +82,17 @@ export function VehicleDetail({ v, locale }: { v: Vehicle; locale: Locale }) {
               </h2>
               <div className="mt-6">
                 <VehicleSpecs v={v} t={t} locale={locale} />
+              </div>
+              <div className="mt-6">
+                <h3 className="text-[11px] uppercase tracking-[0.22em] text-muted">{t.vehicle.categoryTitle}</h3>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {v.category.map((c) => (
+                    <li key={c} className="border border-line-strong/50 px-3 py-1.5 text-[13px] tracking-[0.04em]">
+                      {t.inventory.categories[c]}
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-3 max-w-[56ch] text-[12px] leading-snug text-muted">{t.vehicle.categoryNote}</p>
               </div>
             </div>
             <div className="lg:col-span-5">

@@ -45,7 +45,7 @@ for (const theme of ["dark", "light"]) {
 // Fichas de vehículo
 for (const theme of ["dark", "light"]) {
   for (const s of sizes) {
-    const { ctx, page } = await open(theme, s, { path: "/es/inventario/lamborghini-huracan-sto-2022" });
+    const { ctx, page } = await open(theme, s, { path: "/es/inventario/lamborghini-urus-performante-2024" });
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     const og = await page.evaluate(() => document.querySelector('meta[property="og:image"]')?.getAttribute("content"));
     await page.screenshot({ path: `qa/qa-vehicle-${theme}-${s.tag}.png`, fullPage: true });

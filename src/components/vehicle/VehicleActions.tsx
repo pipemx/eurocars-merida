@@ -1,17 +1,21 @@
 "use client";
 
-import { useEffect } from "react";
-import { MessageSquareText } from "lucide-react";
+import { useEffect, useState } from "react";
+import { CalendarCheck, MessageSquareText } from "lucide-react";
 import type { Vehicle } from "@/types/vehicle";
 import { track } from "@/lib/analytics";
 import { whatsappHref, vehicleName } from "@/lib/whatsapp";
+import { CompareButton } from "../CompareButton";
+import { FavoriteButton } from "../FavoriteButton";
 import { WhatsappIcon } from "../icons";
 import { ShareVehicleButton } from "../ShareVehicleButton";
 import { usePreferences } from "../providers/Preferences";
+import { TestDriveDialog } from "./TestDriveDialog";
 
 /** CTAs de la ficha + evento vehicle_view. */
 export function VehicleActions({ v }: { v: Vehicle }) {
   const { t } = usePreferences();
+  const [testDrive, setTestDrive] = useState(false);
   const name = vehicleName(v);
 
   useEffect(() => {
@@ -46,8 +50,16 @@ export function VehicleActions({ v }: { v: Vehicle }) {
             <ShareVehicleButton vehicle={v} variant="labeled" className="w-full [&>button]:w-full [&>button]:justify-center" />
           </div>
         </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <FavoriteButton vehicle={v} variant="labeled" />
+          <CompareButton vehicle={v} variant="labeled" />
+        </div>
+        <button type="button" onClick={() => setTestDrive(true)} className="btn-ghost w-full !px-3">
+          <CalendarCheck className="h-4 w-4" strokeWidth={1.5} /> {t.testDrive.open}
+          <span className="rounded-full border border-line-strong/60 px-2 py-0.5 text-[10px] tracking-[0.14em] text-muted">{t.testDrive.demoTag}</span>
+        </button>
       </div>
-
+      {testDrive && <TestDriveDialog vehicle={v} onClose={() => setTestDrive(false)} />}
     </>
   );
 }
