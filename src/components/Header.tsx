@@ -66,7 +66,7 @@ export function Header() {
           </Link>
 
           <nav aria-label="Principal" className="hidden lg:block">
-            <ul className="flex items-center gap-7 xl:gap-10">
+            <ul className="flex items-center gap-6 whitespace-nowrap xl:gap-10">
               {items.map((item) => {
                 const active = item.id === activeId;
                 return (

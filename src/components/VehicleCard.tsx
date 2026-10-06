@@ -28,7 +28,7 @@ export function VehicleCard({ vehicle: v }: { vehicle: Vehicle }) {
         <VehiclePhoto
           vehicle={v}
           image={v.gallery[0]}
-          sizes="(min-width:1280px) 330px, (min-width:768px) 42vw, 82vw"
+          sizes="(min-width:1280px) 25vw, (min-width:640px) 50vw, 100vw"
           imageClassName="object-cover transition-[transform,filter] duration-[1200ms] ease-[var(--ease-editorial)] group-hover:scale-[1.04] group-hover:contrast-[1.05]"
         />
         {/* Wrappers absolutos: los botones llevan su propio `relative` y no pueden posicionarse solos */}
@@ -47,7 +47,7 @@ export function VehicleCard({ vehicle: v }: { vehicle: Vehicle }) {
           <h3 className="text-[16px] leading-[1.4] tracking-[0.05em]">
             <Link href={vehicleUrl(locale, v.slug)} className="after:absolute after:inset-0 after:content-['']">
               <span className="block text-[12px] font-medium uppercase tracking-[0.2em] text-muted">{v.brand}</span>
-              <span className="mt-1 block text-[19px] tracking-[0.02em]">{name}</span>
+              <span className="mt-1 block line-clamp-2 text-[19px] tracking-[0.02em]">{name}</span>
             </Link>
           </h3>
           <VehicleStatus status={v.status} label={t.inventory.status[v.status]} />

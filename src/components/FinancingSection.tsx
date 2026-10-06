@@ -11,7 +11,7 @@ export function FinancingSection({ t }: { t: Dictionary }) {
     <section id="financiamiento" aria-labelledby="fin-title" className="relative isolate scroll-mt-20 overflow-hidden bg-bg">
       <div data-reveal className="reveal-img relative h-[300px] overflow-hidden md:absolute md:inset-y-0 md:left-0 md:h-auto md:w-[58%]">
         <div className="absolute inset-0">
-          <Image src="/eurocars/showroom/mockup-interior.webp" alt="" fill sizes="(min-width:768px) 58vw, 100vw" className="object-cover object-[30%_50%]" />
+          <Image src="/eurocars/inventory/lamborghini-urus-performante-2024/03.webp" alt="Lamborghini Urus Performante 2024, inventario Eurocars" fill sizes="(min-width:768px) 58vw, 100vw" className="object-cover object-[55%_62%]" />
         </div>
         <div aria-hidden className="absolute inset-0 !transform-none bg-[linear-gradient(0deg,var(--bg)_0%,transparent_45%)] md:bg-[linear-gradient(270deg,var(--bg)_0%,color-mix(in_srgb,var(--bg)_80%,transparent)_14%,transparent_45%)]" />
       </div>

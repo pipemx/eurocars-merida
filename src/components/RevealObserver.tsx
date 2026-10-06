@@ -12,18 +12,25 @@ export function RevealObserver() {
       els.forEach((el) => el.classList.add("is-in"));
       return;
     }
+    // Las imágenes .reveal-img nacen recortadas por clip-path (área visible = 0, el observer nunca las
+    // vería): se observa su sección contenedora y se revela la imagen cuando ésta entra.
+    const targets = new Map<Element, HTMLElement[]>();
+    for (const el of els) {
+      const t = el.classList.contains("reveal-img") ? (el.closest("section") ?? el) : el;
+      targets.set(t, [...(targets.get(t) ?? []), el]);
+    }
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           if (e.isIntersecting) {
-            e.target.classList.add("is-in");
+            targets.get(e.target)?.forEach((el) => el.classList.add("is-in"));
             io.unobserve(e.target);
           }
         }
       },
       { rootMargin: "0px 0px -12% 0px", threshold: 0.08 },
     );
-    els.forEach((el) => io.observe(el));
+    targets.forEach((_, t) => io.observe(t));
     return () => io.disconnect();
   }, [pathname]);
   return null;
