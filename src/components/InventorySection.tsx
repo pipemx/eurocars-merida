@@ -38,7 +38,7 @@ export function InventorySection({ vehicles }: { vehicles: Vehicle[] }) {
 
   return (
     <section id="inventario" aria-labelledby="inv-title" className="scroll-mt-20 bg-bg pb-16 pt-16 md:pb-24 md:pt-24">
-      <div data-reveal className="reveal container-ec flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+      <div data-reveal className="reveal container-ec flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
         <div>
           <p className="eyebrow flex items-center gap-4 text-muted">
             <span aria-hidden className="draw-line h-px w-10 bg-accent" />

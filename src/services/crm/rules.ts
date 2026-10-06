@@ -19,7 +19,7 @@ export const STATUS_LABEL: Record<LeadStatus, string> = {
 };
 export const STATUS_ORDER: LeadStatus[] = ["nuevo", "contactado", "seguimiento", "cita", "negociacion", "vendido"];
 
-export const SOURCE_LABEL: Record<LeadSource, string> = { web: "Web", whatsapp: "WhatsApp", instagram: "Instagram", facebook: "Facebook", google: "Google" };
+export const SOURCE_LABEL: Record<LeadSource, string> = { web: "Web", whatsapp: "WhatsApp", instagram: "Instagram", facebook: "Facebook", google: "Google", asistente: "Asistente IA" };
 
 export const ACTION_LABEL: Record<FollowUpAction, string> = { follow_up: "Dar seguimiento", reply: "Responder", review: "Revisar" };
 
@@ -149,6 +149,7 @@ export function summarizeLeads(leads: EffectiveLead[]) {
 
 /** Línea de tiempo demo: se construye con los datos del prospecto (sin eventos inventados aparte). */
 export function leadTimeline(l: EffectiveLead, vehicleLabel: string): TimelineEvent[] {
+  if (l.aiSummary) return aiLeadTimeline(l);
   const ev: { m: number; text: string }[] = [
     { m: l.enteredMinutesAgo, text: `Nueva consulta desde ${SOURCE_LABEL[l.source]}` },
     { m: Math.max(1, l.enteredMinutesAgo - 4), text: `Solicitó información del ${vehicleLabel}` },
@@ -162,6 +163,18 @@ export function leadTimeline(l: EffectiveLead, vehicleLabel: string): TimelineEv
     const st = followUpState(fu.dayOffset);
     out.push({ id: "fu", when: `${cap(dayLabel(fu.dayOffset))} ${fu.time}`, text: st === "overdue" ? "Seguimiento vencido" : "Seguimiento pendiente", pending: true });
   }
+  if (l.followUpDone) out.push({ id: "done", when: "Ahora", text: "Seguimiento marcado como hecho (demo)" });
+  return out;
+}
+
+/** Prospecto creado desde el asistente IA: línea de tiempo con el resumen de la conversación. */
+function aiLeadTimeline(l: EffectiveLead): TimelineEvent[] {
+  const out: TimelineEvent[] = [
+    { id: "ai-start", when: agoLong(l.enteredMinutesAgo), text: "Consulta iniciada desde Eurocars AI" },
+    { id: "ai-summary", when: agoLong(l.enteredMinutesAgo), text: "Resumen de la conversación", detail: l.aiSummary },
+  ];
+  const fu = openFollowUp(l);
+  if (fu) out.push({ id: "fu", when: `${cap(dayLabel(fu.dayOffset))} ${fu.time}`, text: "Responder al prospecto", pending: true });
   if (l.followUpDone) out.push({ id: "done", when: "Ahora", text: "Seguimiento marcado como hecho (demo)" });
   return out;
 }

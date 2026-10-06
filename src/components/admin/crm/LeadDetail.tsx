@@ -57,6 +57,7 @@ export function LeadDetail({ id }: { id: string }) {
             followUp: lead.followUpDone ? null : lead.followUp,
             appointment: lead.appointment,
             notesCount: lead.notes.length,
+            aiSummary: lead.aiSummary,
           }
         : null,
     [lead, vehicle, vehicleNames],
@@ -141,7 +142,7 @@ export function LeadDetail({ id }: { id: string }) {
             <div className="mt-3 flex flex-wrap items-center gap-3">
               <PriorityChip level={pr.level} reason={pr.reason} />
               <span className="text-[13px] text-muted">{pr.reason}</span>
-              <DemoTag label="Prospecto ficticio" />
+              <DemoTag label={lead.createdAt ? "Creado en la demo" : "Prospecto ficticio"} />
             </div>
           </div>
         </div>
@@ -155,7 +156,10 @@ export function LeadDetail({ id }: { id: string }) {
       </header>
 
       <dl className="rise mt-10 grid grid-cols-2 gap-x-6 gap-y-6 border-t border-line pt-6 lg:grid-cols-4" style={{ "--d": "80ms" } as React.CSSProperties}>
-        <Fact label="Origen">{SOURCE_LABEL[lead.source]}</Fact>
+        <Fact label="Origen">
+          {SOURCE_LABEL[lead.source]}
+          {lead.phone && <span className="block text-[13px] text-muted">Tel. (demo): {lead.phone}</span>}
+        </Fact>
         <Fact label="Fecha de entrada">{agoLong(lead.enteredMinutesAgo)}</Fact>
         <Fact label="Última interacción">
           {lead.lastInteraction.label}
@@ -280,6 +284,13 @@ export function LeadDetail({ id }: { id: string }) {
                   <span aria-hidden className={`absolute left-0 top-[7px] h-[11px] w-[11px] rounded-full border ${e.pending ? "border-accent bg-bg" : "border-accent bg-accent"}`} />
                   <p className="text-[12.5px] text-muted">{e.when}</p>
                   <p className={`mt-0.5 text-[15px] ${e.pending ? "text-accent" : ""}`}>{e.text}</p>
+                  {e.detail && (
+                    <ul className="mt-1.5 space-y-1 text-[13.5px] text-ink/80" data-timeline-detail>
+                      {e.detail.map((d) => (
+                        <li key={d}>{d}</li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               ))}
             </ol>

@@ -19,6 +19,8 @@ export interface CrmAssistContext {
   followUp: { dayOffset: number; time: string; action: FollowUpAction } | null;
   appointment: { dayOffset: number; time: string; kind: "test_drive" | "visit" } | null;
   notesCount: number;
+  /** Si el prospecto vino del asistente IA: resumen de su conversación. */
+  aiSummary?: string[];
 }
 
 export interface CrmAssistant {
@@ -88,6 +90,7 @@ export const mockCrmAssistant: CrmAssistant = {
   },
 
   async summarizeConversation(c) {
+    if (c.aiSummary?.length) return c.aiSummary;
     const lines = [`Prospecto interesado en ${c.vehicleFullName}.`, `Llegó por ${SOURCE_LABEL[c.source]}.`, `${c.lastInteraction.label}.`, `Última interacción ${agoLong(c.lastInteraction.minutesAgo).toLowerCase()}.`, `Estado: ${STATUS_LABEL[c.status]}.`];
     if (c.appointment && c.appointment.dayOffset >= 0) lines.push(`${c.appointment.kind === "test_drive" ? "Prueba de manejo" : "Visita"} ${dayLabel(c.appointment.dayOffset)} ${c.appointment.time}.`);
     if (c.followUp) {

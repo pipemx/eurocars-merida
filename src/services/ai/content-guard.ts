@@ -45,7 +45,7 @@ function visibleStrings(c: GeneratedVehicleContent): string[] {
 }
 
 /** Afirmaciones que solo pueden aparecer si el dato existe (en características, motor, etc.). */
-const UNVERIFIED_CLAIMS = [
+export const UNVERIFIED_CLAIMS = [
   "caballos", "hp", "cv ", "última generación", "ultima generacion", "lujos", "lujoso", "alto desempeño", "alto rendimiento", "tecnología", "tecnologia",
   "piel", "techo", "turbo", "híbrid", "hibrid", "eléctric", "electric", "garantía", "garantia", "financiamiento", "crédito", "credito", "enganche",
   "único dueño", "un solo dueño", "factura", "agencia", "sin accidentes", "impecable", "como nuevo", "luxurious", "horsepower", "warranty", "financing",

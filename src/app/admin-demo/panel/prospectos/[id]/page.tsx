@@ -4,8 +4,7 @@ import { getLeads } from "@/services/crm";
 
 export const metadata: Metadata = { title: "Prospecto" };
 
-export const dynamicParams = false;
-
+// Los prospectos creados desde el asistente (solo en el navegador) se resuelven en cliente.
 export async function generateStaticParams() {
   return (await getLeads()).map((l) => ({ id: l.id }));
 }

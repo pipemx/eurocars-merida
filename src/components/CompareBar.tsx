@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Columns2, X } from "lucide-react";
 import { routePath } from "@/i18n/config";
+import { DEMO_MODE } from "@/lib/demo-mode";
 import { compare, COMPARE_MIN } from "@/services/compare";
 import { usePreferences } from "./providers/Preferences";
 
@@ -22,12 +23,14 @@ export function CompareBar({ items }: { items: CompareSummary[] }) {
 
   const onVehiclePage = pathname.startsWith(`${routePath(locale, "inventory")}/`);
   const ready = picked.length >= COMPARE_MIN;
+  // Con el asistente IA (demo, ES) en móvil: la barra sube para no taparlo (el botón del asistente ocupa 92–140 px).
+  const aboveAssistant = DEMO_MODE && locale === "es";
 
   return (
     <div
       role="region"
       aria-label={t.compare.barAria}
-      className={`rise fixed inset-x-3 z-40 flex items-center gap-3 border border-line-strong/60 bg-surface/95 py-2 pl-4 pr-2 text-ink shadow-[var(--shadow)] backdrop-blur-md md:inset-x-auto md:left-6 md:min-w-[400px] ${onVehiclePage ? "bottom-[84px] lg:bottom-6" : "bottom-[92px] md:bottom-6"}`}
+      className={`rise fixed inset-x-3 z-40 flex items-center gap-3 border border-line-strong/60 bg-surface/95 py-2 pl-4 pr-2 text-ink shadow-[var(--shadow)] backdrop-blur-md md:inset-x-auto md:left-6 md:min-w-[400px] ${onVehiclePage ? (aboveAssistant ? "bottom-[156px] lg:bottom-6" : "bottom-[84px] lg:bottom-6") : aboveAssistant ? "bottom-[156px] md:bottom-6" : "bottom-[92px] md:bottom-6"}`}
     >
       <Columns2 className="hidden h-4 w-4 shrink-0 text-accent sm:block" strokeWidth={1.6} aria-hidden />
       <div className="min-w-0 flex-1">

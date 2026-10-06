@@ -8,6 +8,7 @@ import { RevealObserver } from "@/components/RevealObserver";
 import { Intro } from "@/components/Intro";
 import { CompareBar } from "@/components/CompareBar";
 import { DemoWhatsApp } from "@/components/DemoWhatsApp";
+import { SalesAssistant } from "@/components/assistant/SalesAssistant";
 import { vehicleName } from "@/lib/whatsapp";
 import { getVehicles } from "@/services/inventory";
 import { cormorant, jost } from "@/lib/fonts";
@@ -55,7 +56,8 @@ export const viewport: Viewport = {
 export default async function LocaleLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
-  const compareItems = (await getVehicles()).map((v) => ({ slug: v.slug, name: vehicleName(v) }));
+  const vehicles = await getVehicles();
+  const compareItems = vehicles.map((v) => ({ slug: v.slug, name: vehicleName(v) }));
   return (
     <html lang={hreflang[locale]} data-theme="dark" className={`${jost.variable} ${cormorant.variable}`} suppressHydrationWarning>
       <head>
@@ -67,6 +69,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
           {children}
           <CompareBar items={compareItems} />
           <DemoWhatsApp />
+          <SalesAssistant vehicles={vehicles} />
           <RevealObserver />
         </PreferencesProvider>
       </body>

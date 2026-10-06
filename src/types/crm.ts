@@ -1,5 +1,5 @@
 export type LeadStatus = "nuevo" | "contactado" | "seguimiento" | "cita" | "negociacion" | "vendido";
-export type LeadSource = "web" | "whatsapp" | "instagram" | "facebook" | "google";
+export type LeadSource = "web" | "whatsapp" | "instagram" | "facebook" | "google" | "asistente";
 export type FollowUpState = "overdue" | "today" | "upcoming";
 export type FollowUpAction = "follow_up" | "reply" | "review";
 export type Priority = "alta" | "media" | "normal" | "cerrado";
@@ -23,6 +23,12 @@ export interface Lead {
   followUp: { dayOffset: number; time: string; action: FollowUpAction } | null;
   /** Cita (prueba de manejo / visita). */
   appointment: { dayOffset: number; time: string; kind: "test_drive" | "visit" } | null;
+  /** Teléfono capturado (solo prospectos creados desde el asistente; puede ser ficticio). */
+  phone?: string;
+  /** ISO: prospectos creados en la demo (los minutos se calculan al mostrarlos). */
+  createdAt?: string;
+  /** Resumen de la conversación con el asistente IA (prospectos creados desde el chat). */
+  aiSummary?: string[];
 }
 
 export interface LeadNote {
@@ -56,6 +62,8 @@ export interface TimelineEvent {
   /** Texto relativo: "Hace 26 h", "Hoy 12:30"… */
   when: string;
   text: string;
+  /** Líneas de detalle (p. ej. resumen de la conversación). */
+  detail?: string[];
   /** Evento futuro/pendiente. */
   pending?: boolean;
 }
